@@ -4,29 +4,71 @@ const REPO = 'zero-editor/zero';
 const GITHUB = `https://github.com/${REPO}`;
 const DMG = `${GITHUB}/releases/latest/download/zero_aarch64.dmg`;
 const BENCHMARKS = `${GITHUB}/blob/main/BENCHMARKS.md`;
+
+// Minimal stroke icons, 24-grid. Rendered inline via set:html.
+const IC: Record<string, string> = {
+  box: '<path d="M12 3 4 7v10l8 4 8-4V7l-8-4Z"/><path d="m4 7 8 4 8-4"/><path d="M12 11v10"/>',
+  watch: '<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5"/><path d="M9.5 2.5h5"/>',
+  chip: '<rect x="7" y="7" width="10" height="10" rx="1"/><path d="M4 10h3M4 14h3M17 10h3M17 14h3M10 4v3M14 4v3M10 17v3M14 17v3"/>',
+  files: '<path d="M9 3h7l4 4v12H9Z"/><path d="M15 3v4h5"/><path d="M5 8v13h11"/>',
+  braces: '<path d="M8.5 4C6.5 4 7 6 7 7.5S7 11 5 12c2 1 2 2.5 2 4.5S6.5 20 8.5 20"/><path d="M15.5 4c2 0 1.5 2 1.5 3.5s0 3.5 2 4.5c-2 1-2 2.5-2 4.5s.5 3.5-1.5 3.5"/>',
+  compass: '<circle cx="12" cy="12" r="9"/><path d="m9.5 14.5 1.5-4 4-1.5-1.5 4z"/>',
+  grid: '<rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/>',
+  gauge: '<path d="M5 19a9 9 0 1 1 14 0"/><path d="m12 14 4.5-4.5"/>',
+  tabs: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M9 5v5M15 5v5"/>',
+  term: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3"/><path d="M12 15h5"/>',
+  branch: '<circle cx="6" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="7" r="2"/><path d="M6 8v8"/><path d="M18 9c0 5-9 3.5-11 7"/>',
+  bars: '<path d="M6 5v14"/><path d="M12 9v10"/><path d="M18 4v9"/>',
+  search: '<circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/>',
+  bolt: '<path d="M13 2 5 13.5h5L9 22l8-11.5h-5z"/>',
+  cursor: '<path d="m5 4 13 6.5-5.5 1.5 3.5 5.5-2.5 1.5-3.5-5.5L6 17z"/>',
+  restore: '<path d="M4 5v6h6"/><path d="M4.5 11a8 8 0 1 0 2.5-6"/>',
+  slash: '<circle cx="12" cy="12" r="9"/><path d="m6 6 12 12"/>',
+};
+
+// Receipts: zero vs cursor, bar widths from the raw ratio. Same machine,
+// same project, three launches each, median. r === 0 draws no bar at all.
+const RECEIPTS = [
+  { icon: 'box',     label: 'App bundle',                z: '14MB',   c: '860MB',            r: 14 / 860,    x: '61×' },
+  { icon: 'files',   label: 'Files in the bundle',       z: '5',      c: '17,035',           r: 5 / 17035,   x: '3,407×' },
+  { icon: 'braces',  label: 'Shipped JavaScript',        z: '1.4MB',  c: '256MB',            r: 1.4 / 256,   x: '183×' },
+  { icon: 'compass', label: 'Bundled runtime',           z: 'none — system WebKit', c: '259MB of Electron', r: 0, x: '' },
+  { icon: 'grid',    label: 'Bundled extensions',        z: '0',      c: '116',              r: 0,           x: 'infinite' },
+  { icon: 'watch',   label: 'Cold launch, to a window',  z: '0.38s',  c: '8.16s',            r: 0.38 / 8.16, x: '21×' },
+  { icon: 'watch',   label: 'Warm launch, ready to use', z: '2.39s',  c: '6.59s',            r: 2.39 / 6.59, x: '2.8×' },
+  { icon: 'chip',    label: 'Memory, one project',       z: '354MB',  c: '687MB',            r: 354 / 687,   x: '1.9×' },
+  { icon: 'chip',    label: 'Memory, four projects',     z: '243MB',  c: '1,803MB',          r: 243 / 1803,  x: '7.4×' },
+  { icon: 'gauge',   label: 'Idle CPU',                  z: '1.10%',  c: '2.66%',            r: 1.1 / 2.66,  x: '2.4×' },
+];
+
+const STATS = [
+  { icon: 'box',   n: '14MB',  l: 'the whole app',           cv: '860MB',   r: 14 / 860,    x: '61×' },
+  { icon: 'bolt',  n: '0.38s', l: 'cold launch to a window', cv: '8.16s',   r: 0.38 / 8.16, x: '21×' },
+  { icon: 'chip',  n: '243MB', l: 'four projects open',      cv: '1,803MB', r: 243 / 1803,  x: '7.4×' },
+];
 ---
 
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>zero — a 14 MB code editor</title>
+    <title>zero — a 14MB code editor</title>
     <meta
       name="description"
-      content="A minimal macOS code editor built around running coding agents. 14 MB, opens in 0.38 seconds, 243 MB with four projects open. press record, ramble, press stop."
+      content="A minimal macOS code editor built around running coding agents. 14MB, opens in 0.38s, 243MB with four projects open. press record, ramble, press stop."
     />
     <link rel="icon" href="/icon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
     <link rel="apple-touch-icon" href="/icon.png" />
     <meta name="theme-color" content="#181818" />
-    <meta property="og:title" content="zero — a 14 MB code editor" />
+    <meta property="og:title" content="zero — a 14MB code editor" />
     <meta
       property="og:description"
       content="A minimal macOS code editor built around running coding agents. press record, ramble, press stop."
     />
     <meta property="og:type" content="website" />
-    <!-- Swap for /icon.png on the real domain once there is one; og wants absolute URLs. -->
-    <meta property="og:image" content={`https://raw.githubusercontent.com/${REPO}/main/design/icon.png`} />
+    <!-- Swap for the real domain's /icon.png once there is one; og wants absolute URLs. -->
+    <meta property="og:image" content={`https://raw.githubusercontent.com/${REPO}/main/src-tauri/icons/128x128%402x.png`} />
     <meta name="twitter:card" content="summary" />
   </head>
 
@@ -34,6 +76,7 @@ const BENCHMARKS = `${GITHUB}/blob/main/BENCHMARKS.md`;
     <nav>
       <a class="wordmark" href="/">zero</a>
       <div class="nav-links">
+        <a href="#points">why</a>
         <a href="#receipts">receipts</a>
         <a href="#install">install</a>
         <a href={GITHUB}>github ↗</a>
@@ -41,55 +84,91 @@ const BENCHMARKS = `${GITHUB}/blob/main/BENCHMARKS.md`;
     </nav>
 
     <header class="hero">
-      <svg class="mark" viewBox="270 182 484 660" aria-hidden="true">
-        <ellipse cx="512" cy="512" rx="220" ry="308" fill="none" stroke="var(--accent)" stroke-width="44"></ellipse>
+      <svg class="mark" viewBox="278 189 468 636" aria-hidden="true">
+        <path
+          fill="var(--accent)"
+          fill-rule="evenodd"
+          d="M 286,507 a 226,310 0 1,0 452,0 a 226,310 0 1,0 -452,0 Z M 354,507 a 158,266 0 1,1 316,0 a 158,266 0 1,1 -316,0 Z"
+        ></path>
       </svg>
-      <p class="kicker">Cursor is an 860&nbsp;MB window around a terminal running Claude&nbsp;Code.</p>
+      <p class="kicker">your code editor is mostly decoration.</p>
       <h1>zero is what’s left.</h1>
       <p class="sub">
-        A 14&nbsp;MB macOS code editor built around running coding agents: projects as tabs, a terminal
-        that takes the whole width, git worktrees down the side, and an editor for when you actually
-        need to read a file. It opens in 0.38&nbsp;seconds and never asks how your onboarding went.
+        A 14MB macOS code editor built around running coding agents: a terminal that takes the whole
+        width, projects as tabs, git worktrees down the side, and an editor for when you actually need
+        to read one of your files. That’s it — on purpose. It opens in 0.38s and has never once asked
+        about your onboarding journey.
       </p>
       <div class="cta">
-        <div class="brew" id="brew">
+        <div class="brew">
           <code>brew install --cask zero-editor/zero/zero</code>
           <button class="copy" data-copy="brew install --cask zero-editor/zero/zero" aria-label="copy the brew command">copy</button>
         </div>
         <p class="cta-alt">
           or <a href={DMG}>download the dmg</a>
-          <span class="release-extra" id="release-extra"></span>
+          <span class="release-extra"></span>
         </p>
       </div>
       <p class="fine">Apple Silicon · 17,593 lines · MIT · no network code in the app</p>
     </header>
 
     <section class="stats" aria-label="the numbers">
-      <div class="stat">
-        <div class="n">14 MB</div>
-        <div class="l">the whole app</div>
-        <div class="vs">cursor: 860 MB</div>
-      </div>
-      <div class="stat">
-        <div class="n">0.38 s</div>
-        <div class="l">cold launch to a window</div>
-        <div class="vs">cursor: 8.16 s</div>
-      </div>
-      <div class="stat">
-        <div class="n">243 MB</div>
-        <div class="l">four projects open</div>
-        <div class="vs">cursor: 1,803 MB</div>
-      </div>
+      {STATS.map((s) => (
+        <div class="stat">
+          <div class="stat-head">
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC[s.icon]} />
+            <span class="x">{s.x}</span>
+          </div>
+          <div class="n">{s.n}</div>
+          <div class="l">{s.l}</div>
+          <div class="duo">
+            <div class="drow"><span class="who">zero</span><span class="track"><i class="fill z" style={`width:${Math.max(s.r * 100, 0)}%`}></i></span><span class="val z">{s.n}</span></div>
+            <div class="drow"><span class="who">cursor</span><span class="track"><i class="fill c" style="width:100%"></i></span><span class="val c">{s.cv}</span></div>
+          </div>
+        </div>
+      ))}
     </section>
+    <p class="stats-fine">
+      Twenty-one times is not a typo — Cursor takes 21× longer to put a window on screen.
+      Measured, not vibes: <a href={BENCHMARKS}>method and scripts →</a>
+    </p>
 
     <section id="demo" class="demo">
-      <div class="window" role="img" aria-label="zero’s title bar: three project tabs, one with a sweeping arc because an agent is working, one with a green ring because it finished, and a full-width terminal below">
+      <div
+        class="window"
+        role="img"
+        aria-label="zero’s window: projects across the titlebar with rings showing agent activity, file tabs below, a sidebar file tree, an editor, and a full-width terminal split in two"
+      >
         <div class="titlebar">
           <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
           <div class="tabs">
-            <span class="tab active"><span class="ring arc"></span>zero</span>
+            <span class="tab active"><span class="ring working"></span>zero</span>
             <span class="tab"><span class="ring done"></span>api</span>
             <span class="tab">website</span>
+          </div>
+        </div>
+        <div class="editor-tabs">
+          <span class="etab active">smoothTermScroll.ts</span>
+          <span class="etab mod">Titlebar.tsx</span>
+          <span class="etab">ZERO.md</span>
+        </div>
+        <div class="body">
+          <div class="side">
+            <div class="ti"><span class="nm">▾ src</span></div>
+            <div class="ti in1"><span class="nm">▾ components</span></div>
+            <div class="ti in2 mod"><span class="nm">Titlebar.tsx</span><b>M</b></div>
+            <div class="ti in2"><span class="nm">Sidebar.tsx</span></div>
+            <div class="ti in1"><span class="nm">▾ lib</span></div>
+            <div class="ti in2 mod"><span class="nm">smoothTermScroll.ts</span><b>M</b></div>
+            <div class="ti in2 add"><span class="nm">memos.ts</span><b>A</b></div>
+            <div class="ti in1"><span class="nm">App.css</span></div>
+          </div>
+          <div class="edit">
+            <div class="cl"><span class="gut mod"></span>// The transform is never cleared to "" — always</div>
+            <div class="cl"><span class="gut mod"></span>// translate3d(0,0,0): dropping it destroys the</div>
+            <div class="cl"><span class="gut"></span>// composited layer, and the next gesture pays</div>
+            <div class="cl"><span class="gut"></span>// 150ms to rasterise a new one.</div>
+            <div class="cl"><span class="gut add"></span>screen.style.transform = keepAlive(offset);</div>
           </div>
         </div>
         <div class="term">
@@ -104,45 +183,99 @@ const BENCHMARKS = `${GITHUB}/blob/main/BENCHMARKS.md`;
         </div>
       </div>
       <p class="caption">
-        Projects are tabs. A ring per tab says what Claude is doing — a sweeping arc while it works, a
-        green circle once it’s quiet and waiting on you. The terminal is the point: full width, splits
-        in any direction, no chrome.
+        The whole interface: projects across the top, their files one row down, a tree at the side,
+        and a terminal that takes the full width. The ring on a project is its agent — sweeping while
+        it works, a closed circle when it’s waiting on you. No chrome; the buttons only appear when
+        your pointer goes looking for them.
       </p>
+    </section>
+
+    <section id="points" class="points">
+      <div class="point">
+        <span class="idx">01</span>
+        <div>
+          <p class="head">every agent, at a glance.</p>
+          <p class="plain">
+            zero is built for running Claude in more than one project at once. Every project is a tab,
+            and the ring on the tab is its agent — spinning while it works, a closed circle when it’s
+            done and waiting on you. You glance, you know, you go back to what you were doing. No
+            window juggling, no “which terminal beeped”.
+          </p>
+          <p class="tech">
+            It watches each shell’s process tree once a second for a live claude, then reads how long
+            the pty has been silent. No integration, no cooperation from the agent required.
+          </p>
+        </div>
+      </div>
+      <div class="point">
+        <span class="idx">02</span>
+        <div>
+          <p class="head"><span class="rec" aria-hidden="true"></span>press record, ramble, press stop.</p>
+          <p class="plain">
+            Talk at your project instead of typing at it. Your Mac writes down what you said, claude
+            tidies it into the note you meant, and recording on top of a memo folds the new thoughts
+            in. Four minutes of thinking out loud, one document you’d actually show someone.
+          </p>
+          <p class="tech">
+            Transcription is macOS 26’s own, on this Mac. One claude -p pass makes the concise
+            version. It’s files all the way down — audio, transcripts, document, all in .zero/memos/ —
+            and a ZERO.md of proper nouns keeps “Anthropic” from coming back as “entropic”.
+          </p>
+        </div>
+      </div>
+      <div class="point">
+        <span class="idx">03</span>
+        <div>
+          <p class="head">it’s barely even there.</p>
+          <p class="plain">
+            14MB on disk. A window in 0.38s. A quarter of a gigabyte with four projects open. Your RAM
+            goes to the agents doing the work, not to the app they run in — an editor should be a
+            tool, not a tenant.
+          </p>
+          <p class="tech">
+            Numbers below, method in BENCHMARKS.md, scripts in bench/ if you’d like to run them on
+            your own machine.
+          </p>
+        </div>
+      </div>
     </section>
 
     <section id="receipts" class="receipts">
       <h2>receipts</h2>
       <p class="method">
         Same machine, same project, both editors, three launches each, median reported.
-        M3&nbsp;Max · 36&nbsp;GB · macOS&nbsp;26.5.1 · Cursor&nbsp;3.15.6.
+        M3&nbsp;Max · 36GB · macOS&nbsp;26.5.1 · Cursor&nbsp;3.15.6. We didn’t have to cherry-pick.
       </p>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr><th></th><th>zero</th><th>cursor</th><th></th></tr>
-          </thead>
-          <tbody>
-            <tr><td>App bundle</td><td class="z">14 MB</td><td class="c">860 MB</td><td class="x">61×</td></tr>
-            <tr><td>Files in the bundle</td><td class="z">5</td><td class="c">17,035</td><td class="x"></td></tr>
-            <tr><td>Shipped JavaScript</td><td class="z">1.4 MB</td><td class="c">256 MB in 12,021 files</td><td class="x">183×</td></tr>
-            <tr><td>Bundled runtime</td><td class="z">none — system WebKit</td><td class="c">259 MB of Electron</td><td class="x"></td></tr>
-            <tr><td>Bundled extensions</td><td class="z">0</td><td class="c">116</td><td class="x"></td></tr>
-            <tr><td>Cold launch</td><td class="z">0.38 s</td><td class="c">8.16 s</td><td class="x">21×</td></tr>
-            <tr><td>Warm launch, window / usable</td><td class="z">0.40 / 2.39 s</td><td class="c">1.14 / 6.59 s</td><td class="x"></td></tr>
-            <tr><td>Memory, one project</td><td class="z">354 MB</td><td class="c">687 MB</td><td class="x">1.9×</td></tr>
-            <tr><td>Idle CPU</td><td class="z">1.10%</td><td class="c">2.66%</td><td class="x">2.4×</td></tr>
-          </tbody>
-        </table>
+      <div class="sheet">
+        {RECEIPTS.map((row) => (
+          <div class="rrow">
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC[row.icon]} />
+            <div class="rlabel">{row.label}</div>
+            <div class="duo">
+              <div class="drow">
+                <span class="who">zero</span>
+                <span class="track">{row.r > 0 && <i class="fill z" style={`width:${row.r * 100}%`}></i>}</span>
+                <span class="val z">{row.z}</span>
+              </div>
+              <div class="drow">
+                <span class="who">cursor</span>
+                <span class="track"><i class="fill c" style="width:100%"></i></span>
+                <span class="val c">{row.c}</span>
+              </div>
+            </div>
+            <div class="rx">{row.x}</div>
+          </div>
+        ))}
       </div>
       <p class="note">
-        It gets wider the more projects you open: each one costs Cursor about 360&nbsp;MB and three
-        processes, linearly — a window per folder. zero opens a tab, and its process count never moves
-        off five. ~2× at one project, ~7× at four. Also: 125&nbsp;fps terminal scrolling on a ProMotion
-        display, against the stock WebView’s 59.
+        It gets wider the more projects you open: each one costs Cursor about 360MB and three
+        processes, linearly — a window per folder. zero opens a tab, and its process count never
+        moves off five. Also: 125fps terminal scrolling on a ProMotion display, against the stock
+        WebView’s 59.
       </p>
       <aside class="caveat">
-        The caveat that matters: Cursor does enormously more — language servers, extensions, debugging,
-        an actual AI product. Most of the gap above is that difference priced in bytes and
+        The caveat that matters: Cursor does enormously more — language servers, extensions,
+        debugging, an actual AI product. Most of the gap above is that difference priced in bytes and
         milliseconds, not better engineering. We just noticed which part you were using.
         <a href={BENCHMARKS}>Method, caveats, and the scripts to reproduce it →</a>
       </aside>
@@ -152,28 +285,28 @@ const BENCHMARKS = `${GITHUB}/blob/main/BENCHMARKS.md`;
       <h2>what’s in it</h2>
       <div class="grid">
         <div class="card">
-          <h3>projects are tabs</h3>
+          <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.tabs} />projects are tabs</h3>
           <p>
             Each keeps its own terminals, sidebar and open files. Switching is a compositor swap —
             everything stays laid out and painted, nothing re-fits when you come back.
           </p>
         </div>
         <div class="card">
-          <h3>the terminal is the point</h3>
+          <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.term} />the terminal is the point</h3>
           <p>
             Full window width, splits in any direction, draggable dividers. No title, no bar, no rule —
             buttons appear only when the pointer goes looking for them.
           </p>
         </div>
         <div class="card">
-          <h3>worktrees, not branches</h3>
+          <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.branch} />worktrees, not branches</h3>
           <p>
             The sidebar lists every worktree with its changes, staging and commit box. Which is the
             shape of the work when several agents are going at once.
           </p>
         </div>
         <div class="card">
-          <h3>bars for what you changed</h3>
+          <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.bars} />bars for what you changed</h3>
           <p>
             Green for added, blue for edited, a red wedge where lines were deleted — in the gutter,
             again beside the scrollbar, and up the file tree, so an edit three folders deep is visible
@@ -181,36 +314,36 @@ const BENCHMARKS = `${GITHUB}/blob/main/BENCHMARKS.md`;
           </p>
         </div>
         <div class="card">
-          <h3>⌘P, and search in Rust</h3>
+          <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.search} />⌘P, and search in Rust</h3>
           <p>
             Fuzzy go-to-file over what git will admit to, so <code>node_modules</code> never appears.
-            Project search runs in-process: 53&nbsp;ms warm on a 6,777-file repo, where ripgrep took 83.
+            Project search runs in-process: 53ms warm on a 6,777-file repo, where ripgrep took 83.
           </p>
         </div>
         <div class="card">
-          <h3>143 languages</h3>
+          <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.braces} />143 languages</h3>
           <p>
             The seven zero is written in are compiled in; the rest load the first time you open one, so
             a project with no Ruby in it never pays for the Ruby mode.
           </p>
         </div>
         <div class="card">
-          <h3>120 fps in a WebView</h3>
+          <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.gauge} />120fps in a WebView</h3>
           <p>
-            WKWebView clamps rendering to 60&nbsp;fps. Safari turns the clamp off through a private
-            flag, so zero flips the same one at startup. This rules out the Mac App Store forever,
-            which we’ve decided to live with.
+            WKWebView clamps rendering to 60fps. Safari turns the clamp off through a private flag, so
+            zero flips the same one at startup. This rules out the Mac App Store forever. We’re at
+            peace.
           </p>
         </div>
         <div class="card">
-          <h3>⌘-click anything</h3>
+          <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.cursor} />⌘-click anything</h3>
           <p>
             A name in the editor opens where it’s defined, through path aliases. A path in the terminal
             opens beside it — <code>file.ts:42</code> lands on the line — and URLs open in your browser.
           </p>
         </div>
         <div class="card">
-          <h3>it opens how you left it</h3>
+          <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.restore} />it opens how you left it</h3>
           <p>
             Projects, splits, sidebar, tabs — restored. The shells are new, because they die with the
             app; <code>claude --continue</code> picks the conversation back up, which is the part you
@@ -219,30 +352,14 @@ const BENCHMARKS = `${GITHUB}/blob/main/BENCHMARKS.md`;
         </div>
       </div>
       <div class="card wide">
-        <h3>what’s not in it</h3>
+        <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.slash} />what’s not in it</h3>
         <p>
           An extension marketplace. A sign-in. A welcome tour. A release-notes popup. A settings sync
-          service. Network code of any kind — the only thing that ever leaves this Mac is what you were
-          already typing into <code>claude</code>. The absence is the feature.
+          service. A chat panel you can’t close — claude lives in the terminal, where you put it.
+          Network code of any kind: the only thing that ever leaves this Mac is what you were already
+          typing into <code>claude</code>. The absence is the feature.
         </p>
       </div>
-    </section>
-
-    <section id="memos" class="memos">
-      <p class="kicker">voice memos, per project</p>
-      <p class="big"><span class="rec" aria-hidden="true"></span>press record, ramble, press stop.</p>
-      <p class="body">
-        Talk at your project instead of typing at it. Transcription is the one built into macOS, so it
-        happens on this Mac — then a single <code>claude -p</code> pass turns four minutes of thinking
-        out loud into the memo you would have typed if typing were the mood. Follow-ups record on top
-        and merge into the same document. And it’s files all the way down: audio, raw transcripts, the
-        document itself, all in <code>.zero/memos/</code>, all greppable, none of it in anyone’s cloud.
-      </p>
-      <p class="fine">
-        Memos need macOS 26 — the transcriber is the system’s; nothing else in zero does. Each project
-        keeps a <code>ZERO.md</code> of its proper nouns, so the recogniser stops hearing “Anthropic”
-        as “entropic”.
-      </p>
     </section>
 
     <section id="install" class="install">
@@ -252,7 +369,7 @@ const BENCHMARKS = `${GITHUB}/blob/main/BENCHMARKS.md`;
         <button class="copy" data-copy="brew install --cask zero-editor/zero/zero" aria-label="copy the brew command">copy</button>
       </div>
       <p class="alt">
-        Or <a href={DMG}>download the dmg</a><span class="release-extra" id="release-extra-2"></span>
+        Or <a href={DMG}>download the dmg</a><span class="release-extra"></span>
         and drag zero to Applications. Apple Silicon, macOS, <code>git</code> — nothing else.
       </p>
       <aside class="unsigned">
@@ -284,14 +401,14 @@ const BENCHMARKS = `${GITHUB}/blob/main/BENCHMARKS.md`;
       </div>
       <p>Made by Lucian and Vid — from Slovenia, with love and a small <code>phys_footprint</code>.</p>
       <p>It’s zero, not Zero. Even at the start of a sentence. Especially there.</p>
-      <p id="page-weight">
-        This page is one HTML file with no framework in it — about 8&nbsp;KB over the wire, a third of
-        what the average one of Cursor’s 12,021 JavaScript files weighs.
+      <p>
+        This page is one HTML file with no framework in it — about 8KB over the wire, a third of what
+        the average one of Cursor’s 12,021 JavaScript files weighs.
       </p>
     </footer>
 
     <script is:inline>
-      // The site’s entire JavaScript: ask GitHub what the newest release is,
+      // The site's entire JavaScript: ask GitHub what the newest release is,
       // and make the copy buttons copy. If any of it fails, the page has
       // already said everything it needed to.
       (async () => {
@@ -304,7 +421,7 @@ const BENCHMARKS = `${GITHUB}/blob/main/BENCHMARKS.md`;
             ? new Date(rel.published_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
             : '';
           const dmg = (rel.assets || []).find((a) => a.name === 'zero_aarch64.dmg');
-          const size = dmg ? `${(dmg.size / 1048576).toFixed(1)} MB` : '';
+          const size = dmg ? `${(dmg.size / 1048576).toFixed(1)}MB` : '';
           const bits = [v && `v${v}`, date, size].filter(Boolean).join(' · ');
           if (!bits) return;
           for (const el of document.querySelectorAll('.release-extra')) {
@@ -327,12 +444,13 @@ const BENCHMARKS = `${GITHUB}/blob/main/BENCHMARKS.md`;
 </html>
 
 <style is:global>
-  /* Tokens lifted from the app’s App.css. The accent isn’t a hue: everything
+  /* Tokens lifted from the app's App.css. The accent isn't a hue: everything
      that wants to stand out here does it by being brighter, which is the only
      axis this theme has. */
   :root {
     --bg: #1f1f1f;
     --bg-panel: #181818;
+    --bg-raised: #2a2d2e;
     --border: #2b2b2b;
     --text: #cccccc;
     --text-dim: #9d9d9d;
@@ -341,6 +459,8 @@ const BENCHMARKS = `${GITHUB}/blob/main/BENCHMARKS.md`;
     --green: #73c991;
     --red: #f14c4c;
     --yellow: #e2c08d;
+    --blue: #4f8bd6;
+    --bar-c: #4a4a4a;
     --font-ui: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
     --font-mono: ui-monospace, 'SF Mono', Menlo, Monaco, 'Cascadia Mono', monospace;
   }
@@ -393,8 +513,14 @@ const BENCHMARKS = `${GITHUB}/blob/main/BENCHMARKS.md`;
     font-weight: 400;
     letter-spacing: 0.25em;
     color: var(--text-faint);
-    text-transform: lowercase;
     margin-bottom: 28px;
+  }
+
+  .ic {
+    width: 17px;
+    height: 17px;
+    flex: none;
+    color: var(--text-faint);
   }
 
   section,
@@ -443,9 +569,8 @@ const BENCHMARKS = `${GITHUB}/blob/main/BENCHMARKS.md`;
   }
 
   .mark {
-    height: 168px;
+    height: 164px;
     margin-bottom: 40px;
-    opacity: 0.9;
   }
 
   .kicker {
@@ -465,7 +590,7 @@ const BENCHMARKS = `${GITHUB}/blob/main/BENCHMARKS.md`;
   }
 
   .sub {
-    max-width: 640px;
+    max-width: 660px;
     margin: 0 auto 36px;
     color: var(--text-dim);
   }
@@ -536,44 +661,120 @@ const BENCHMARKS = `${GITHUB}/blob/main/BENCHMARKS.md`;
     grid-template-columns: repeat(3, 1fr);
     gap: 16px;
     padding-top: 0;
+    padding-bottom: 14px;
   }
 
   .stat {
     border: 1px solid var(--border);
     border-radius: 10px;
     background: var(--bg-panel);
-    padding: 26px 24px;
+    padding: 22px 24px 20px;
+  }
+
+  .stat-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+
+  .x {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--green);
   }
 
   .stat .n {
     font-family: var(--font-mono);
-    font-size: clamp(30px, 4vw, 42px);
+    font-size: clamp(30px, 4vw, 40px);
     color: var(--accent);
-    line-height: 1.15;
+    line-height: 1.1;
   }
 
   .stat .l {
     color: var(--text-dim);
     font-size: 13.5px;
-    margin-top: 6px;
+    margin-top: 5px;
+    margin-bottom: 16px;
   }
 
-  .stat .vs {
+  /* the little zero-vs-cursor bar pair, shared by tiles and receipts */
+
+  .duo {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-width: 0;
+  }
+
+  .drow {
+    display: grid;
+    grid-template-columns: 44px 1fr auto;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .who {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: var(--text-faint);
+  }
+
+  .track {
+    height: 4px;
+    border-radius: 2px;
+    overflow: hidden;
+    background: transparent;
+  }
+
+  .fill {
+    display: block;
+    height: 100%;
+    border-radius: 2px;
+  }
+
+  .fill.z {
+    background: var(--accent);
+    min-width: 2px;
+  }
+
+  .fill.c {
+    background: var(--bar-c);
+  }
+
+  .val {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    white-space: nowrap;
+  }
+
+  .val.z {
+    color: var(--accent);
+  }
+
+  .val.c {
+    color: var(--text-faint);
+  }
+
+  .stats-fine {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 24px 24px;
     font-family: var(--font-mono);
     font-size: 12px;
     color: var(--text-faint);
-    margin-top: 12px;
+    text-align: center;
   }
 
   /* ===== demo window ===== */
 
   .demo {
-    padding-top: 8px;
+    padding-top: 34px;
     text-align: center;
   }
 
   .window {
-    max-width: 720px;
+    max-width: 840px;
     margin: 0 auto;
     text-align: left;
     background: var(--bg);
@@ -627,39 +828,153 @@ const BENCHMARKS = `${GITHUB}/blob/main/BENCHMARKS.md`;
     color: var(--text);
   }
 
+  /* the ring, to the app's own spec: a white arc with a comet tail while an
+     agent works, over a faint full track; a closed white circle once it's
+     quiet and waiting on you */
+
   .ring {
-    width: 11px;
-    height: 11px;
+    position: relative;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
     flex: none;
   }
 
-  .ring.arc {
-    background: conic-gradient(var(--accent) 0 110deg, transparent 110deg 360deg);
-    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px));
-    mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px));
-    animation: sweep 1.8s linear infinite;
+  .ring.working {
+    background: conic-gradient(
+      from 0deg,
+      transparent 0deg 250deg,
+      rgba(255, 255, 255, 0.5) 330deg,
+      #ffffff 358deg,
+      transparent 360deg
+    );
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 1.4px), #000 calc(100% - 1.4px));
+    mask: radial-gradient(farthest-side, transparent calc(100% - 1.4px), #000 calc(100% - 1.4px));
+    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
+    animation: sweep 1.5s linear infinite;
+  }
+
+  .ring.working::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1.4px solid rgba(255, 255, 255, 0.07);
   }
 
   .ring.done {
-    border: 1.5px solid var(--green);
+    border: 1.4px solid #ffffff;
+    box-shadow: 0 0 4px 0 rgba(255, 255, 255, 0.4);
   }
 
   @keyframes sweep {
     to { transform: rotate(360deg); }
   }
 
+  .editor-tabs {
+    display: flex;
+    background: var(--bg-panel);
+    border-bottom: 1px solid var(--border);
+    padding: 0 12px;
+    gap: 2px;
+  }
+
+  .etab {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--text-faint);
+    padding: 7px 12px;
+    white-space: nowrap;
+  }
+
+  .etab.active {
+    color: var(--text);
+    background: var(--bg);
+    border-radius: 6px 6px 0 0;
+  }
+
+  .etab.mod {
+    color: var(--yellow);
+  }
+
+  .body {
+    display: grid;
+    grid-template-columns: 172px 1fr;
+  }
+
+  .side {
+    border-right: 1px solid var(--border);
+    background: var(--bg-panel);
+    padding: 10px 0 12px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.9;
+    color: var(--text-dim);
+  }
+
+  .ti {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 0 12px;
+  }
+
+  .ti .nm {
+    flex: 1 1 auto;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ti.in1 { padding-left: 24px; }
+  .ti.in2 { padding-left: 36px; }
+
+  .ti b {
+    flex: none;
+    font-weight: 400;
+  }
+
+  .ti.mod, .ti.mod b { color: var(--yellow); }
+  .ti.add, .ti.add b { color: var(--green); }
+
+  .edit {
+    padding: 12px 0 14px;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    line-height: 1.9;
+    color: var(--text-faint);
+    overflow: hidden;
+  }
+
+  .cl {
+    display: flex;
+    align-items: stretch;
+    white-space: nowrap;
+  }
+
+  /* the change gutter: a bar against every uncommitted line */
+  .gut {
+    width: 3px;
+    margin: 2px 12px 2px 8px;
+    border-radius: 1px;
+    flex: none;
+  }
+
+  .gut.mod { background: var(--blue); }
+  .gut.add { background: var(--green); }
+
   .term {
     display: grid;
     grid-template-columns: 1.7fr 1fr;
+    border-top: 1px solid var(--border);
     font-family: var(--font-mono);
-    font-size: 13px;
+    font-size: 12.5px;
     line-height: 1.75;
-    min-height: 118px;
+    min-height: 108px;
   }
 
   .pane {
-    padding: 16px 16px 20px;
+    padding: 14px 16px 18px;
   }
 
   .pane + .pane {
@@ -684,10 +999,69 @@ const BENCHMARKS = `${GITHUB}/blob/main/BENCHMARKS.md`;
   }
 
   .caption {
-    max-width: 620px;
+    max-width: 640px;
     margin: 28px auto 0;
     color: var(--text-dim);
     font-size: 14px;
+  }
+
+  /* ===== the three points ===== */
+
+  .points {
+    display: flex;
+    flex-direction: column;
+    gap: 64px;
+  }
+
+  .point {
+    display: grid;
+    grid-template-columns: 72px 1fr;
+    gap: 8px;
+  }
+
+  .idx {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text-faint);
+    padding-top: 9px;
+  }
+
+  .head {
+    font-family: var(--font-mono);
+    font-size: clamp(21px, 3.4vw, 32px);
+    color: var(--accent);
+    line-height: 1.3;
+    margin-bottom: 14px;
+    letter-spacing: -0.01em;
+  }
+
+  .rec {
+    display: inline-block;
+    width: 0.42em;
+    height: 0.42em;
+    border-radius: 50%;
+    background: var(--red);
+    margin-right: 0.5em;
+    vertical-align: 0.06em;
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    50% { opacity: 0.25; }
+  }
+
+  .plain {
+    max-width: 620px;
+    color: var(--text-dim);
+  }
+
+  .tech {
+    max-width: 620px;
+    margin-top: 12px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--text-faint);
   }
 
   /* ===== receipts ===== */
@@ -696,57 +1070,40 @@ const BENCHMARKS = `${GITHUB}/blob/main/BENCHMARKS.md`;
     color: var(--text-faint);
     font-size: 13.5px;
     margin-bottom: 24px;
+    max-width: 720px;
   }
 
-  .table-wrap {
-    overflow-x: auto;
+  .sheet {
     border: 1px solid var(--border);
     border-radius: 10px;
     background: var(--bg-panel);
+    overflow: hidden;
   }
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13.5px;
-    min-width: 560px;
-  }
-
-  th {
-    font-family: var(--font-mono);
-    font-weight: 400;
-    font-size: 12px;
-    color: var(--text-faint);
-    text-align: left;
-    padding: 12px 18px 10px;
+  .rrow {
+    display: grid;
+    grid-template-columns: 17px 200px 1fr 74px;
+    gap: 18px;
+    align-items: center;
+    padding: 13px 20px;
     border-bottom: 1px solid var(--border);
   }
 
-  td {
-    padding: 10px 18px;
-    border-bottom: 1px solid var(--border);
-    color: var(--text-dim);
-  }
-
-  tr:last-child td {
+  .rrow:last-child {
     border-bottom: none;
   }
 
-  td.z {
-    font-family: var(--font-mono);
-    color: var(--accent);
-    white-space: nowrap;
+  .rlabel {
+    font-size: 13.5px;
+    color: var(--text-dim);
   }
 
-  td.c {
+  .rx {
     font-family: var(--font-mono);
-    color: var(--text-faint);
-  }
-
-  td.x {
-    font-family: var(--font-mono);
+    font-size: 12.5px;
     color: var(--green);
     text-align: right;
+    white-space: nowrap;
   }
 
   .note {
@@ -786,11 +1143,19 @@ const BENCHMARKS = `${GITHUB}/blob/main/BENCHMARKS.md`;
   }
 
   .card h3 {
+    display: flex;
+    align-items: center;
+    gap: 9px;
     font-family: var(--font-mono);
     font-size: 13px;
     font-weight: 400;
     color: var(--accent);
     margin-bottom: 10px;
+  }
+
+  .card h3 .ic {
+    width: 16px;
+    height: 16px;
   }
 
   .card p {
@@ -800,55 +1165,6 @@ const BENCHMARKS = `${GITHUB}/blob/main/BENCHMARKS.md`;
 
   .card.wide {
     margin-top: 14px;
-  }
-
-  /* ===== memos ===== */
-
-  .memos {
-    text-align: center;
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    max-width: none;
-    background: var(--bg-panel);
-  }
-
-  .memos .kicker {
-    margin-bottom: 20px;
-  }
-
-  .big {
-    font-family: var(--font-mono);
-    font-size: clamp(24px, 4.6vw, 46px);
-    color: var(--accent);
-    line-height: 1.25;
-    margin-bottom: 26px;
-    letter-spacing: -0.01em;
-  }
-
-  .rec {
-    display: inline-block;
-    width: 0.42em;
-    height: 0.42em;
-    border-radius: 50%;
-    background: var(--red);
-    margin-right: 0.5em;
-    vertical-align: 0.06em;
-    animation: pulse 1.6s ease-in-out infinite;
-  }
-
-  @keyframes pulse {
-    50% { opacity: 0.25; }
-  }
-
-  .memos .body {
-    max-width: 660px;
-    margin: 0 auto;
-    color: var(--text-dim);
-  }
-
-  .memos .fine {
-    max-width: 660px;
-    margin: 22px auto 0;
   }
 
   /* ===== install ===== */
@@ -949,7 +1265,7 @@ const BENCHMARKS = `${GITHUB}/blob/main/BENCHMARKS.md`;
     }
 
     .mark {
-      height: 120px;
+      height: 118px;
       margin-bottom: 30px;
     }
 
@@ -962,9 +1278,17 @@ const BENCHMARKS = `${GITHUB}/blob/main/BENCHMARKS.md`;
       overflow-x: auto;
     }
 
-    .foot-row {
-      flex-direction: column;
-      gap: 14px;
+    .body {
+      grid-template-columns: 1fr;
+    }
+
+    .side {
+      display: none;
+    }
+
+    .editor-tabs {
+      overflow-x: auto;
+      scrollbar-width: none;
     }
 
     /* splits go in any direction; on a phone, down */
@@ -977,10 +1301,30 @@ const BENCHMARKS = `${GITHUB}/blob/main/BENCHMARKS.md`;
       border-left: none;
       border-top: 1px solid var(--border);
     }
+
+    .point {
+      grid-template-columns: 1fr;
+      gap: 2px;
+    }
+
+    .rrow {
+      grid-template-columns: 17px 1fr 74px;
+      grid-template-rows: auto auto;
+      row-gap: 10px;
+    }
+
+    .rrow .duo {
+      grid-column: 1 / -1;
+    }
+
+    .foot-row {
+      flex-direction: column;
+      gap: 14px;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .ring.arc,
+    .ring.working,
     .cursor,
     .rec {
       animation: none;

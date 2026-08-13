@@ -11,3 +11,5 @@ node_modules/
 
 # macOS
 .DS_Store
+# zero: local voice memos
+.zero/memos/

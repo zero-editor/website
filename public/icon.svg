@@ -1,11 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <!-- Drawn to src-tauri/icons/zero-icon.py: the mark is an ellipse with a
+       narrower ellipse cut out, so the sides carry more weight than the top
+       and bottom, and it sits 5px high. -->
   <defs>
-    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#242424"/>
-      <stop offset="1" stop-color="#191919"/>
+    <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#33343a"/>
+      <stop offset="0.55" stop-color="#1c1d21"/>
+      <stop offset="1" stop-color="#101114"/>
+    </linearGradient>
+    <linearGradient id="ink" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#d8dade"/>
     </linearGradient>
   </defs>
-  <rect width="1024" height="1024" rx="230" fill="url(#bgGrad)"/>
-  <rect x="6" y="6" width="1012" height="1012" rx="226" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="8"/>
-  <ellipse cx="512" cy="512" rx="220" ry="308" fill="none" stroke="#e6e6e6" stroke-width="44"/>
+  <rect width="1024" height="1024" rx="230" fill="url(#ground)"/>
+  <path fill="url(#ink)" fill-rule="evenodd" d="M 286,507 a 226,310 0 1,0 452,0 a 226,310 0 1,0 -452,0 Z M 354,507 a 158,266 0 1,1 316,0 a 158,266 0 1,1 -316,0 Z"/>
 </svg>
