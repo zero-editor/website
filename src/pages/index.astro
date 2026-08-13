@@ -140,21 +140,39 @@ const STATS = [
         </div>
         <div class="body">
           <div class="side">
+            <div class="srail">
+              <span class="sic active" title="files"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M2.3 11.8V4.5a.9.9 0 0 1 .9-.9h2.5l1.5 1.7h5.6a.9.9 0 0 1 .9.9v5.6a.9.9 0 0 1-.9.9H3.2a.9.9 0 0 1-.9-.9Z" stroke-linejoin="round"/></svg></span>
+              <span class="sic" title="search"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="7" cy="7" r="4.2"/><path d="M10.1 10.1 13.5 13.5" stroke-linecap="round"/></svg></span>
+              <span class="sic" title="worktrees"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="4.5" cy="3.2" r="1.7"/><circle cx="4.5" cy="12.8" r="1.7"/><circle cx="11.5" cy="6" r="1.7"/><path d="M4.5 4.9v6.2"/><path d="M11.5 7.7c0 2.4-2.3 3.2-4.6 3.6" stroke-linecap="round"/></svg></span>
+              <span class="sic" title="memos"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="6.3" y="2.1" width="3.4" height="6.4" rx="1.7"/><path d="M4 7.4v1.1a4 4 0 0 0 8 0V7.4" stroke-linecap="round"/><path d="M8 12.5v1.4" stroke-linecap="round"/></svg></span>
+            </div>
             <div class="ti"><span class="nm">▾ src</span></div>
             <div class="ti in1"><span class="nm">▾ components</span></div>
-            <div class="ti in2 mod"><span class="nm">Titlebar.tsx</span><b>M</b></div>
             <div class="ti in2"><span class="nm">Sidebar.tsx</span></div>
+            <div class="ti in2"><span class="nm">Terminals.tsx</span></div>
+            <div class="ti in2 mod"><span class="nm">Titlebar.tsx</span><b>M</b></div>
             <div class="ti in1"><span class="nm">▾ lib</span></div>
-            <div class="ti in2 mod"><span class="nm">smoothTermScroll.ts</span><b>M</b></div>
+            <div class="ti in2"><span class="nm">cmTheme.ts</span></div>
             <div class="ti in2 add"><span class="nm">memos.ts</span><b>A</b></div>
+            <div class="ti in2 mod"><span class="nm">smoothTermScroll.ts</span><b>M</b></div>
             <div class="ti in1"><span class="nm">App.css</span></div>
+            <div class="ti"><span class="nm">▸ src-tauri</span></div>
+            <div class="ti"><span class="nm">▸ bench</span></div>
+            <div class="ti"><span class="nm">package.json</span></div>
+            <div class="ti"><span class="nm">README.md</span></div>
           </div>
           <div class="edit">
-            <div class="cl"><span class="gut mod"></span>// The transform is never cleared to "" — always</div>
-            <div class="cl"><span class="gut mod"></span>// translate3d(0,0,0): dropping it destroys the</div>
-            <div class="cl"><span class="gut"></span>// composited layer, and the next gesture pays</div>
-            <div class="cl"><span class="gut"></span>// 150ms to rasterise a new one.</div>
-            <div class="cl"><span class="gut add"></span>screen.style.transform = keepAlive(offset);</div>
+            <div class="cl"><span class="gut"></span><span class="ln">56</span><span class="code"><span class="tc">// Always a transform, never "" — clearing it drops the composited layer, and</span></span></div>
+            <div class="cl"><span class="gut"></span><span class="ln">57</span><span class="code"><span class="tc">// the next gesture then stalls ~150ms rasterising a full-screen text surface</span></span></div>
+            <div class="cl"><span class="gut"></span><span class="ln">58</span><span class="code"><span class="tc">// before it can move. Measured: one such stall at the start of every scroll.</span></span></div>
+            <div class="cl"><span class="gut mod"></span><span class="ln">59</span><span class="code"><span class="tk">const</span> <span class="td">apply</span> <span class="tk">=</span> <span class="tpu">()</span> <span class="tk">=&gt;</span> <span class="tpu">{'{'}</span></span></div>
+            <div class="cl"><span class="gut mod"></span><span class="ln">60</span><span class="code"><span class="ind"></span><span class="tv">screen</span><span class="tpu">.</span><span class="tp">style</span><span class="tpu">.</span><span class="tp">transform</span> <span class="tk">=</span> <span class="ts">{'`translate3d(0, ${resid}px, 0)`'}</span><span class="tpu">;</span></span></div>
+            <div class="cl"><span class="gut mod"></span><span class="ln">61</span><span class="code"><span class="tpu">{'};'}</span></span></div>
+            <div class="cl"><span class="gut"></span><span class="ln">62</span><span class="code"></span></div>
+            <div class="cl"><span class="gut"></span><span class="ln">63</span><span class="code"><span class="tk">const</span> <span class="td">measure</span> <span class="tk">=</span> <span class="tpu">():</span> <span class="tt">number</span> <span class="tk">=&gt;</span> <span class="tpu">{'{'}</span></span></div>
+            <div class="cl"><span class="gut"></span><span class="ln">64</span><span class="code"><span class="ind"></span><span class="tk">const</span> <span class="td">rows</span> <span class="tk">=</span> <span class="tv">host</span><span class="tpu">.</span><span class="tp">querySelector</span><span class="tpu">&lt;</span><span class="tt">HTMLElement</span><span class="tpu">&gt;(</span><span class="ts">".xterm-rows"</span><span class="tpu">);</span></span></div>
+            <div class="cl"><span class="gut"></span><span class="ln">65</span><span class="code"><span class="ind"></span><span class="tk">if</span> <span class="tpu">(</span><span class="tk">!</span><span class="tv">rows</span> <span class="tk">||</span> <span class="tv">term</span><span class="tpu">.</span><span class="tp">rows</span> <span class="tk">&lt;</span> <span class="tn">1</span><span class="tpu">)</span> <span class="tk">return</span> <span class="tn">0</span><span class="tpu">;</span></span></div>
+            <div class="cl"><span class="gut"></span><span class="ln">66</span><span class="code"><span class="ind"></span><span class="tk">const</span> <span class="td">h</span> <span class="tk">=</span> <span class="tv">rows</span><span class="tpu">.</span><span class="tp">getBoundingClientRect</span><span class="tpu">().</span><span class="tp">height</span> <span class="tk">/</span> <span class="tv">term</span><span class="tpu">.</span><span class="tp">rows</span><span class="tpu">;</span></span></div>
           </div>
         </div>
         <div class="term">
@@ -1004,11 +1022,51 @@ const STATS = [
   .side {
     border-right: 1px solid var(--border);
     background: var(--bg-panel);
-    padding: 10px 0 12px;
+    padding: 0 0 12px;
     font-family: var(--font-mono);
     font-size: 11px;
-    line-height: 1.9;
+    line-height: 1.95;
     color: var(--text-dim);
+  }
+
+  /* the sidebar's tab rail: files, search, worktrees, memos */
+
+  .srail {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 9px 10px 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 9px;
+  }
+
+  .sic {
+    position: relative;
+    width: 16px;
+    height: 16px;
+    padding-bottom: 8px;
+    box-sizing: content-box;
+    color: var(--text-faint);
+  }
+
+  .sic svg {
+    width: 16px;
+    height: 16px;
+    display: block;
+  }
+
+  .sic.active {
+    color: var(--text);
+  }
+
+  .sic.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: -3px;
+    right: -3px;
+    height: 1.5px;
+    background: var(--accent);
   }
 
   .ti {
@@ -1036,12 +1094,15 @@ const STATS = [
   .ti.mod, .ti.mod b { color: var(--yellow); }
   .ti.add, .ti.add b { color: var(--green); }
 
+  /* the editor pane, in the app's TRMNL theme — colors from cmTheme.ts */
+
   .edit {
     padding: 12px 0 14px;
     font-family: var(--font-mono);
     font-size: 11.5px;
-    line-height: 1.9;
-    color: var(--text-faint);
+    line-height: 1.95;
+    color: #d8dee9;
+    background: #151515;
     overflow: hidden;
   }
 
@@ -1054,7 +1115,7 @@ const STATS = [
   /* the change gutter: a bar against every uncommitted line */
   .gut {
     width: 3px;
-    margin: 2px 12px 2px 8px;
+    margin: 2px 5px 2px 6px;
     border-radius: 1px;
     flex: none;
   }
@@ -1062,18 +1123,48 @@ const STATS = [
   .gut.mod { background: var(--blue); }
   .gut.add { background: var(--green); }
 
+  .ln {
+    flex: none;
+    width: 3.2ch;
+    text-align: right;
+    color: #6d6d6d;
+    padding-right: 10px;
+    border-right: 1px solid #2a2a2a;
+    margin-right: 14px;
+  }
+
+  .code {
+    white-space: pre;
+  }
+
+  .ind {
+    display: inline-block;
+    width: 2ch;
+  }
+
+  .tc { color: #6d6d6d; font-style: italic; }
+  .tk { color: #83d6c5; }
+  .ts { color: #e394dc; }
+  .tn { color: #ebc88d; }
+  .tf { color: #efb080; }
+  .tp { color: #81d2ce; }
+  .tt { color: #87c3ff; }
+  .tv { color: #e394dc; }
+  .td { color: #d8dee9; }
+  .tpu { color: #a4a4a4; }
+
   .term {
     display: grid;
     grid-template-columns: 1.7fr 1fr;
     border-top: 1px solid var(--border);
     font-family: var(--font-mono);
     font-size: 12.5px;
-    line-height: 1.75;
-    min-height: 108px;
+    line-height: 1.8;
+    min-height: 132px;
   }
 
   .pane {
-    padding: 14px 16px 18px;
+    padding: 15px 16px 20px;
   }
 
   .pane + .pane {
