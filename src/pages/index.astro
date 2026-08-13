@@ -180,12 +180,13 @@ const STATS = [
       <div class="point">
         <svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.ring} />
         <div>
-          <p class="head">every project, at a glance.</p>
+          <p class="head">you always know what’s running.</p>
           <p class="plain">
-            zero is built for having several things going at once. Each project is a tab, and the ring
-            on the tab is that project’s work session — sweeping while something is running, a closed
-            circle once it’s finished and waiting on you. One glance across the top of the window and
-            you know where everything stands. No window juggling, no “which terminal beeped”.
+            zero is built for having several things going at once. Every project is a tab; inside each
+            one, the terminals and splits stay exactly where you arranged them. The ring on a tab is
+            that project’s pulse — sweeping while something is running, a closed circle once it’s
+            quiet and waiting on you. One look across the top of the window and you know where
+            everything stands. No window juggling, no “which terminal beeped”.
           </p>
           <p class="tech">
             It reads each shell’s process tree and how long the pty has been silent, once a second.
@@ -269,7 +270,7 @@ const STATS = [
           </div>
           <div class="tl">
             <div class="tlrow">
-              <span class="tlab">cold, to a window</span>
+              <span class="tlab">first window, cold start</span>
               <span class="ttrack">
                 <i class="stem c" style="width:90.7%"></i><i class="pin c" style="left:90.7%"></i>
                 <i class="stem z" style="width:4.2%"></i><i class="pin z" style="left:4.2%"></i>
@@ -278,7 +279,7 @@ const STATS = [
               </span>
             </div>
             <div class="tlrow">
-              <span class="tlab">warm, ready to use</span>
+              <span class="tlab">ready to work, warm start</span>
               <span class="ttrack">
                 <i class="stem c" style="width:73.2%"></i><i class="pin c" style="left:73.2%"></i>
                 <i class="stem z" style="width:26.6%"></i><i class="pin z" style="left:26.6%"></i>
@@ -288,30 +289,46 @@ const STATS = [
             </div>
             <div class="taxis"><span>0s</span><span>3s</span><span>6s</span><span>9s</span></div>
           </div>
+          <p class="micro">
+            Two different finish lines, not a typo: a window on screen first, ready-to-work second.
+            A cold zero puts its window up before a warm Cursor does — 0.38s against 1.14s.
+          </p>
         </div>
 
         <div class="bcard">
           <div class="bhead">
-            <h4>memory</h4>
-            <span class="badge">1.9–7.4×</span>
+            <h4>memory, as projects open</h4>
+            <span class="badge">up to 7.4×</span>
           </div>
-          <div class="colwrap">
-            <div class="colgroup">
-              <div class="colpair">
-                <div class="colv"><span class="cval z">354</span><i class="colbar z" style="height:19.6%"></i></div>
-                <div class="colv"><span class="cval c">687</span><i class="colbar c" style="height:38.1%"></i></div>
-              </div>
-              <span class="collab">one project</span>
-            </div>
-            <div class="colgroup">
-              <div class="colpair">
-                <div class="colv"><span class="cval z">243</span><i class="colbar z" style="height:13.5%"></i></div>
-                <div class="colv"><span class="cval c">1,803</span><i class="colbar c" style="height:100%"></i></div>
-              </div>
-              <span class="collab">four projects</span>
-            </div>
-          </div>
-          <p class="micro">MB, phys_footprint. Each Cursor project is a window: ~360MB and three processes, linearly. zero’s process count never moves off five.</p>
+          <svg class="memchart" viewBox="0 0 344 166" role="img" aria-label="memory in MB from one to four projects open, measured, then the linear trend extended to six: Cursor climbs from 807MB to 1,803MB and projects to about 2.5GB; zero stays in the noise around 250MB">
+            <line x1="24" y1="150" x2="340" y2="150" stroke="var(--border)" />
+            <line x1="24" y1="98.1" x2="340" y2="98.1" stroke="var(--border)" stroke-dasharray="2 4" />
+            <line x1="24" y1="46.2" x2="340" y2="46.2" stroke="var(--border)" stroke-dasharray="2 4" />
+            <text x="20" y="153" text-anchor="end">0</text>
+            <text x="20" y="101" text-anchor="end">1GB</text>
+            <text x="20" y="49" text-anchor="end">2GB</text>
+            <polyline points="28,108.1 83,95.5 138,74.6 193,56.4" fill="none" stroke="var(--bar-c)" stroke-width="2" />
+            <polyline points="193,56.4 248,37.7 303,19" fill="none" stroke="var(--bar-c)" stroke-width="2" stroke-dasharray="3 5" />
+            <polyline points="28,142.6 83,140.9 138,128.2 193,137.4" fill="none" stroke="var(--accent)" stroke-width="2" />
+            <polyline points="193,137.4 303,137.4" fill="none" stroke="var(--accent)" stroke-width="2" stroke-dasharray="3 5" />
+            <circle cx="28" cy="108.1" r="2.5" fill="var(--bar-c)" /><circle cx="83" cy="95.5" r="2.5" fill="var(--bar-c)" /><circle cx="138" cy="74.6" r="2.5" fill="var(--bar-c)" /><circle cx="193" cy="56.4" r="2.5" fill="var(--bar-c)" />
+            <circle cx="28" cy="142.6" r="2.5" fill="var(--accent)" /><circle cx="83" cy="140.9" r="2.5" fill="var(--accent)" /><circle cx="138" cy="128.2" r="2.5" fill="var(--accent)" /><circle cx="193" cy="137.4" r="2.5" fill="var(--accent)" />
+            <text x="186" y="52" text-anchor="end">1,803</text>
+            <text x="252" y="12">≈2.5GB at six</text>
+            <text class="z" x="144" y="118">zero: 143–420, noise</text>
+            <text x="28" y="163">1</text>
+            <text x="83" y="163">2</text>
+            <text x="138" y="163">3</text>
+            <text x="193" y="163">4</text>
+            <text x="248" y="163">5</text>
+            <text x="303" y="163">6</text>
+          </svg>
+          <p class="micro">
+            MB of phys_footprint, one through four projects measured, the dashed part extended on
+            Cursor’s own slope — a window per project, ~360MB and three processes each. zero opens a
+            tab instead; its per-project cost is below its own noise floor, which is why its line
+            won’t sit still.
+          </p>
         </div>
 
         <div class="bcard">
@@ -337,6 +354,10 @@ const STATS = [
               <span class="badge">∞ less</span>
             </div>
           </div>
+          <p class="micro">
+            The whole bundle is five files. There is nothing to update, nothing to sync, and nothing
+            to disable.
+          </p>
         </div>
 
         <div class="bcard">
@@ -381,77 +402,50 @@ const STATS = [
         <div class="card">
           <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.tabs} />projects are tabs</h3>
           <p>
-            Each keeps its own terminals, sidebar and open files. Switching is a compositor swap —
-            everything stays laid out and painted, nothing re-fits when you come back.
+            Each keeps its own terminals, sidebar and files. Switching is instant, because nothing
+            re-renders.
           </p>
         </div>
         <div class="card">
           <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.term} />the terminal is the point</h3>
           <p>
-            Full window width, splits in any direction, draggable dividers. No title, no bar, no rule —
-            buttons appear only when the pointer goes looking for them.
+            Full width, splits in any direction, no chrome. Buttons appear when the pointer comes
+            looking.
           </p>
         </div>
         <div class="card">
           <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.branch} />worktrees, not branches</h3>
           <p>
-            The sidebar lists every worktree with its changes, staging and commit box. Which is the
-            shape of the work when several sessions are going at once.
+            Every worktree down the sidebar with its changes, staging and commit box.
           </p>
         </div>
         <div class="card">
           <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.bars} />bars for what you changed</h3>
           <p>
-            Green for added, blue for edited, a red wedge where lines were deleted — in the gutter,
-            again beside the scrollbar, and up the file tree, so an edit three folders deep is visible
-            without opening anything.
+            Every uncommitted line gets a bar — in the gutter, beside the scrollbar, and up the file
+            tree.
           </p>
         </div>
         <div class="card">
-          <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.search} />⌘P, and search in Rust</h3>
+          <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.search} />getting around</h3>
           <p>
-            Fuzzy go-to-file over what git will admit to, so <code>node_modules</code> never appears.
-            Project search runs in-process: 53ms warm on a 6,777-file repo, where ripgrep took 83.
-          </p>
-        </div>
-        <div class="card">
-          <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.braces} />143 languages</h3>
-          <p>
-            The seven zero is written in are compiled in; the rest load the first time you open one, so
-            a project with no Ruby in it never pays for the Ruby mode.
-          </p>
-        </div>
-        <div class="card">
-          <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.gauge} />120fps in a WebView</h3>
-          <p>
-            WKWebView clamps rendering to 60fps. Safari turns the clamp off through a private flag, so
-            zero flips the same one at startup. This rules out the Mac App Store forever. We’re at
-            peace.
-          </p>
-        </div>
-        <div class="card">
-          <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.cursor} />⌘-click anything</h3>
-          <p>
-            A name in the editor opens where it’s defined, through path aliases. A path in the terminal
-            opens beside it — <code>file.ts:42</code> lands on the line — and URLs open in your browser.
+            <code>⌘P</code> fuzzy-opens anything git admits to. <code>⌘⇧F</code> searches in Rust,
+            quicker than ripgrep. ⌘-click jumps to a definition, and <code>file.ts:42</code> in the
+            terminal opens on the line.
           </p>
         </div>
         <div class="card">
           <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.restore} />it opens how you left it</h3>
           <p>
-            Projects, splits, sidebar, tabs — restored. The shells are new, because they die with the
-            app; <code>claude --continue</code> picks the conversation back up, which is the part you
-            wanted.
+            Projects, splits, tabs — restored. <code>claude --continue</code> does the rest.
           </p>
         </div>
       </div>
       <div class="card wide">
         <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.slash} />what’s not in it</h3>
         <p>
-          An extension marketplace. A sign-in. A welcome tour. A release-notes popup. A settings sync
-          service. A chat panel you can’t close — claude lives in the terminal, where you put it.
-          Network code of any kind: the only thing that ever leaves this Mac is what you were already
-          typing into <code>claude</code>. The absence is the feature.
+          An extension marketplace. A sign-in. A welcome tour. A chat panel you can’t close. Network
+          code of any kind. The absence is the feature.
         </p>
       </div>
     </section>
@@ -496,7 +490,7 @@ const STATS = [
       <p>Made by Lucian and Vid — from Slovenia, with love and a small <code>phys_footprint</code>.</p>
       <p>It’s zero, not Zero. Even at the start of a sentence. Especially there.</p>
       <p>
-        This page is one HTML file with no framework in it — about 8KB over the wire, a third of what
+        This page is one HTML file with no framework in it — about 11KB over the wire, half of what
         the average one of Cursor’s 12,021 JavaScript files weighs.
       </p>
     </footer>
@@ -1331,57 +1325,26 @@ const STATS = [
     color: var(--text-faint);
   }
 
-  /* memory columns */
+  /* the memory chart */
 
-  .colwrap {
-    display: flex;
-    gap: 36px;
-    align-items: flex-end;
-  }
-
-  .colgroup {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .colpair {
-    display: flex;
-    gap: 6px;
-    align-items: flex-end;
-    height: 110px;
-  }
-
-  .colv {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 4px;
-    height: 100%;
-  }
-
-  .cval {
-    font-family: var(--font-mono);
-    font-size: 10px;
-  }
-
-  .cval.z { color: var(--accent); }
-  .cval.c { color: var(--text-faint); }
-
-  .colbar {
-    width: 26px;
-    border-radius: 3px 3px 0 0;
+  .memchart {
+    width: 100%;
+    height: auto;
     display: block;
   }
 
-  .colbar.z { background: var(--accent); min-height: 3px; }
-  .colbar.c { background: var(--bar-c); }
+  .memchart text {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    fill: var(--text-faint);
+  }
 
-  .collab {
-    font-size: 11.5px;
-    color: var(--text-faint);
-    text-align: center;
+  .memchart text.z {
+    fill: var(--accent);
+  }
+
+  .memchart text.ax {
+    font-size: 8.5px;
   }
 
   /* the zeroes card */
