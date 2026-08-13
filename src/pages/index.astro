@@ -10,10 +10,7 @@ const IC: Record<string, string> = {
   box: '<path d="M12 3 4 7v10l8 4 8-4V7l-8-4Z"/><path d="m4 7 8 4 8-4"/><path d="M12 11v10"/>',
   watch: '<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5"/><path d="M9.5 2.5h5"/>',
   chip: '<rect x="7" y="7" width="10" height="10" rx="1"/><path d="M4 10h3M4 14h3M17 10h3M17 14h3M10 4v3M14 4v3M10 17v3M14 17v3"/>',
-  files: '<path d="M9 3h7l4 4v12H9Z"/><path d="M15 3v4h5"/><path d="M5 8v13h11"/>',
   braces: '<path d="M8.5 4C6.5 4 7 6 7 7.5S7 11 5 12c2 1 2 2.5 2 4.5S6.5 20 8.5 20"/><path d="M15.5 4c2 0 1.5 2 1.5 3.5s0 3.5 2 4.5c-2 1-2 2.5-2 4.5s.5 3.5-1.5 3.5"/>',
-  compass: '<circle cx="12" cy="12" r="9"/><path d="m9.5 14.5 1.5-4 4-1.5-1.5 4z"/>',
-  grid: '<rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/>',
   gauge: '<path d="M5 19a9 9 0 1 1 14 0"/><path d="m12 14 4.5-4.5"/>',
   tabs: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M9 5v5M15 5v5"/>',
   term: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="m7 9 3 3-3 3"/><path d="M12 15h5"/>',
@@ -24,27 +21,18 @@ const IC: Record<string, string> = {
   cursor: '<path d="m5 4 13 6.5-5.5 1.5 3.5 5.5-2.5 1.5-3.5-5.5L6 17z"/>',
   restore: '<path d="M4 5v6h6"/><path d="M4.5 11a8 8 0 1 0 2.5-6"/>',
   slash: '<circle cx="12" cy="12" r="9"/><path d="m6 6 12 12"/>',
+  ring: '<circle cx="12" cy="12" r="8" opacity="0.18"/><path d="M12 4a8 8 0 1 1-7.39 4.94"/>',
+  feather: '<path d="M19.5 4.5c-5.5 0-11 3.5-13 9-1 2.7-1.2 5.3-1.2 7 2 0 4.6-.2 7.2-1.2 5.5-2 9-7.5 8.5-14.8Z"/><path d="m4 20 9.5-9.5"/>',
 };
 
-// Receipts: zero vs cursor, bar widths from the raw ratio. Same machine,
-// same project, three launches each, median. r === 0 draws no bar at all.
-const RECEIPTS = [
-  { icon: 'box',     label: 'App bundle',                z: '14MB',   c: '860MB',            r: 14 / 860,    x: '61×' },
-  { icon: 'files',   label: 'Files in the bundle',       z: '5',      c: '17,035',           r: 5 / 17035,   x: '3,407×' },
-  { icon: 'braces',  label: 'Shipped JavaScript',        z: '1.4MB',  c: '256MB',            r: 1.4 / 256,   x: '183×' },
-  { icon: 'compass', label: 'Bundled runtime',           z: 'none — system WebKit', c: '259MB of Electron', r: 0, x: '' },
-  { icon: 'grid',    label: 'Bundled extensions',        z: '0',      c: '116',              r: 0,           x: 'infinite' },
-  { icon: 'watch',   label: 'Cold launch, to a window',  z: '0.38s',  c: '8.16s',            r: 0.38 / 8.16, x: '21×' },
-  { icon: 'watch',   label: 'Warm launch, ready to use', z: '2.39s',  c: '6.59s',            r: 2.39 / 6.59, x: '2.8×' },
-  { icon: 'chip',    label: 'Memory, one project',       z: '354MB',  c: '687MB',            r: 354 / 687,   x: '1.9×' },
-  { icon: 'chip',    label: 'Memory, four projects',     z: '243MB',  c: '1,803MB',          r: 243 / 1803,  x: '7.4×' },
-  { icon: 'gauge',   label: 'Idle CPU',                  z: '1.10%',  c: '2.66%',            r: 1.1 / 2.66,  x: '2.4×' },
-];
+// The GitHub mark, the one link that gets to be a logo.
+const OCTO =
+  '<path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>';
 
 const STATS = [
-  { icon: 'box',   n: '14MB',  l: 'the whole app',           cv: '860MB',   r: 14 / 860,    x: '61×' },
-  { icon: 'bolt',  n: '0.38s', l: 'cold launch to a window', cv: '8.16s',   r: 0.38 / 8.16, x: '21×' },
-  { icon: 'chip',  n: '243MB', l: 'four projects open',      cv: '1,803MB', r: 243 / 1803,  x: '7.4×' },
+  { icon: 'box',  x: '61×',  l: 'smaller on disk',                 zv: '14MB',  cv: '860MB',   r: 14 / 860 },
+  { icon: 'bolt', x: '21×',  l: 'sooner to a window',              zv: '0.38s', cv: '8.16s',   r: 0.38 / 8.16 },
+  { icon: 'chip', x: '7.4×', l: 'lighter with four projects open', zv: '243MB', cv: '1,803MB', r: 243 / 1803 },
 ];
 ---
 
@@ -60,7 +48,7 @@ const STATS = [
     <link rel="icon" href="/icon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
     <link rel="apple-touch-icon" href="/icon.png" />
-    <meta name="theme-color" content="#181818" />
+    <meta name="theme-color" content="#1f1f1f" />
     <meta property="og:title" content="zero — a 14MB code editor" />
     <meta
       property="og:description"
@@ -73,14 +61,12 @@ const STATS = [
   </head>
 
   <body>
-    <nav>
+    <nav aria-label="site">
       <a class="wordmark" href="/">zero</a>
-      <div class="nav-links">
-        <a href="#points">why</a>
-        <a href="#receipts">receipts</a>
-        <a href="#install">install</a>
-        <a href={GITHUB}>github ↗</a>
-      </div>
+      <a href="#install">install</a>
+      <a class="gh" href={GITHUB} aria-label="zero on GitHub">
+        <svg viewBox="0 0 16 16" fill="currentColor" set:html={OCTO} />
+      </a>
     </nav>
 
     <header class="hero">
@@ -108,36 +94,36 @@ const STATS = [
           or <a href={DMG}>download the dmg</a>
           <span class="release-extra"></span>
         </p>
+        <p class="cta-alt oss">
+          Open source, MIT — <a href={GITHUB}>all 17,593 lines of it on GitHub</a>.
+        </p>
       </div>
-      <p class="fine">Apple Silicon · 17,593 lines · MIT · no network code in the app</p>
+      <p class="fine">Apple Silicon · macOS 26 · no network code in the app</p>
     </header>
 
     <section class="stats" aria-label="the numbers">
       {STATS.map((s) => (
         <div class="stat">
-          <div class="stat-head">
-            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC[s.icon]} />
-            <span class="x">{s.x}</span>
-          </div>
-          <div class="n">{s.n}</div>
+          <svg class="ic big" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC[s.icon]} />
+          <div class="nx">{s.x}</div>
           <div class="l">{s.l}</div>
           <div class="duo">
-            <div class="drow"><span class="who">zero</span><span class="track"><i class="fill z" style={`width:${Math.max(s.r * 100, 0)}%`}></i></span><span class="val z">{s.n}</span></div>
-            <div class="drow"><span class="who">cursor</span><span class="track"><i class="fill c" style="width:100%"></i></span><span class="val c">{s.cv}</span></div>
+            <div class="drow"><span class="track"><i class="fill z" style={`width:${Math.max(s.r * 100, 0)}%`}></i></span><span class="val z">{s.zv}</span></div>
+            <div class="drow"><span class="track"><i class="fill c" style="width:100%"></i></span><span class="val c">{s.cv}</span></div>
           </div>
         </div>
       ))}
     </section>
     <p class="stats-fine">
-      Twenty-one times is not a typo — Cursor takes 21× longer to put a window on screen.
-      Measured, not vibes: <a href={BENCHMARKS}>method and scripts →</a>
+      The bright bar is zero; the long one is Cursor. And twenty-one is measured, not marketing —
+      <a href={BENCHMARKS}>method and scripts →</a>
     </p>
 
     <section id="demo" class="demo">
       <div
         class="window"
         role="img"
-        aria-label="zero’s window: projects across the titlebar with rings showing agent activity, file tabs below, a sidebar file tree, an editor, and a full-width terminal split in two"
+        aria-label="zero’s window: projects across the titlebar with rings showing session activity, file tabs below, a sidebar file tree, an editor, and a full-width terminal split in two"
       >
         <div class="titlebar">
           <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
@@ -184,33 +170,33 @@ const STATS = [
       </div>
       <p class="caption">
         The whole interface: projects across the top, their files one row down, a tree at the side,
-        and a terminal that takes the full width. The ring on a project is its agent — sweeping while
-        it works, a closed circle when it’s waiting on you. No chrome; the buttons only appear when
-        your pointer goes looking for them.
+        and a terminal that takes the full width. The ring on a project is its session — sweeping
+        while something’s working, a closed circle when it’s done and waiting on you. No chrome; the
+        buttons only appear when your pointer goes looking for them.
       </p>
     </section>
 
     <section id="points" class="points">
       <div class="point">
-        <span class="idx">01</span>
+        <svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.ring} />
         <div>
-          <p class="head">every agent, at a glance.</p>
+          <p class="head">every project, at a glance.</p>
           <p class="plain">
-            zero is built for running Claude in more than one project at once. Every project is a tab,
-            and the ring on the tab is its agent — spinning while it works, a closed circle when it’s
-            done and waiting on you. You glance, you know, you go back to what you were doing. No
-            window juggling, no “which terminal beeped”.
+            zero is built for having several things going at once. Each project is a tab, and the ring
+            on the tab is that project’s work session — sweeping while something is running, a closed
+            circle once it’s finished and waiting on you. One glance across the top of the window and
+            you know where everything stands. No window juggling, no “which terminal beeped”.
           </p>
           <p class="tech">
-            It watches each shell’s process tree once a second for a live claude, then reads how long
-            the pty has been silent. No integration, no cooperation from the agent required.
+            It reads each shell’s process tree and how long the pty has been silent, once a second.
+            Nothing to configure, nothing to integrate — the ring just knows.
           </p>
         </div>
       </div>
       <div class="point">
-        <span class="idx">02</span>
+        <svg class="pt-ic rec" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="7"/></svg>
         <div>
-          <p class="head"><span class="rec" aria-hidden="true"></span>press record, ramble, press stop.</p>
+          <p class="head">press record, ramble, press stop.</p>
           <p class="plain">
             Talk at your project instead of typing at it. Your Mac writes down what you said, claude
             tidies it into the note you meant, and recording on top of a memo folds the new thoughts
@@ -224,13 +210,12 @@ const STATS = [
         </div>
       </div>
       <div class="point">
-        <span class="idx">03</span>
+        <svg class="pt-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.feather} />
         <div>
           <p class="head">it’s barely even there.</p>
           <p class="plain">
             14MB on disk. A window in 0.38s. A quarter of a gigabyte with four projects open. Your RAM
-            goes to the agents doing the work, not to the app they run in — an editor should be a
-            tool, not a tenant.
+            goes to the work, not to the app it runs in — an editor should be a tool, not a tenant.
           </p>
           <p class="tech">
             Numbers below, method in BENCHMARKS.md, scripts in bench/ if you’d like to run them on
@@ -240,39 +225,148 @@ const STATS = [
       </div>
     </section>
 
-    <section id="receipts" class="receipts">
-      <h2>receipts</h2>
+    <section id="benchmarks" class="bench">
+      <h2>benchmarks</h2>
       <p class="method">
         Same machine, same project, both editors, three launches each, median reported.
         M3&nbsp;Max · 36GB · macOS&nbsp;26.5.1 · Cursor&nbsp;3.15.6. We didn’t have to cherry-pick.
+        In every graph: <b class="zl">zero is the bright mark</b>; the long grey one is Cursor.
       </p>
-      <div class="sheet">
-        {RECEIPTS.map((row) => (
-          <div class="rrow">
-            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC[row.icon]} />
-            <div class="rlabel">{row.label}</div>
-            <div class="duo">
-              <div class="drow">
-                <span class="who">zero</span>
-                <span class="track">{row.r > 0 && <i class="fill z" style={`width:${row.r * 100}%`}></i>}</span>
-                <span class="val z">{row.z}</span>
-              </div>
-              <div class="drow">
-                <span class="who">cursor</span>
-                <span class="track"><i class="fill c" style="width:100%"></i></span>
-                <span class="val c">{row.c}</span>
-              </div>
-            </div>
-            <div class="rx">{row.x}</div>
+
+      <div class="bento">
+        <div class="bcard">
+          <div class="bhead">
+            <h4>on disk</h4>
+            <span class="badge">61×</span>
           </div>
-        ))}
+          <div class="duo">
+            <div class="drow"><span class="track"><i class="fill z" style="width:1.63%"></i></span><span class="val z">14MB</span></div>
+            <div class="drow"><span class="track"><i class="fill c" style="width:100%"></i></span><span class="val c">860MB</span></div>
+          </div>
+          <p class="micro">And 5 files in the bundle, against 17,035 — 3,407× fewer things that can be wrong.</p>
+        </div>
+
+        <div class="bcard">
+          <div class="bhead">
+            <h4>shipped JavaScript</h4>
+            <span class="badge">183×</span>
+          </div>
+          <div class="sqwrap">
+            <i class="sq c"></i>
+            <i class="sq z"></i>
+            <div class="sqlab">
+              <div class="val z">1.4MB</div>
+              <div class="val c">256MB, in 12,021 files</div>
+            </div>
+          </div>
+          <p class="micro">Drawn to scale, by area. The bright square is the entire frontend.</p>
+        </div>
+
+        <div class="bcard span2">
+          <div class="bhead">
+            <h4>launch</h4>
+            <span class="badge">21×</span>
+          </div>
+          <div class="tl">
+            <div class="tlrow">
+              <span class="tlab">cold, to a window</span>
+              <span class="ttrack">
+                <i class="stem c" style="width:90.7%"></i><i class="pin c" style="left:90.7%"></i>
+                <i class="stem z" style="width:4.2%"></i><i class="pin z" style="left:4.2%"></i>
+                <span class="tval z" style="left:5.5%">0.38s</span>
+                <span class="tval c" style="left:92%">8.16s</span>
+              </span>
+            </div>
+            <div class="tlrow">
+              <span class="tlab">warm, ready to use</span>
+              <span class="ttrack">
+                <i class="stem c" style="width:73.2%"></i><i class="pin c" style="left:73.2%"></i>
+                <i class="stem z" style="width:26.6%"></i><i class="pin z" style="left:26.6%"></i>
+                <span class="tval z" style="left:28%">2.39s</span>
+                <span class="tval c" style="left:74.5%">6.59s</span>
+              </span>
+            </div>
+            <div class="taxis"><span>0s</span><span>3s</span><span>6s</span><span>9s</span></div>
+          </div>
+        </div>
+
+        <div class="bcard">
+          <div class="bhead">
+            <h4>memory</h4>
+            <span class="badge">1.9–7.4×</span>
+          </div>
+          <div class="colwrap">
+            <div class="colgroup">
+              <div class="colpair">
+                <div class="colv"><span class="cval z">354</span><i class="colbar z" style="height:19.6%"></i></div>
+                <div class="colv"><span class="cval c">687</span><i class="colbar c" style="height:38.1%"></i></div>
+              </div>
+              <span class="collab">one project</span>
+            </div>
+            <div class="colgroup">
+              <div class="colpair">
+                <div class="colv"><span class="cval z">243</span><i class="colbar z" style="height:13.5%"></i></div>
+                <div class="colv"><span class="cval c">1,803</span><i class="colbar c" style="height:100%"></i></div>
+              </div>
+              <span class="collab">four projects</span>
+            </div>
+          </div>
+          <p class="micro">MB, phys_footprint. Each Cursor project is a window: ~360MB and three processes, linearly. zero’s process count never moves off five.</p>
+        </div>
+
+        <div class="bcard">
+          <div class="bhead">
+            <h4>ships with</h4>
+            <span class="badge">∞</span>
+          </div>
+          <div class="zeroes">
+            <div class="zrow">
+              <span class="zbig">0</span>
+              <div class="zwhat">
+                <span class="val z">bundled extensions</span>
+                <span class="val c">Cursor: 116</span>
+              </div>
+              <span class="badge">∞ fewer</span>
+            </div>
+            <div class="zrow">
+              <span class="zbig">0</span>
+              <div class="zwhat">
+                <span class="val z">bundled runtime — system WebKit</span>
+                <span class="val c">Cursor: 259MB of Electron</span>
+              </div>
+              <span class="badge">∞ less</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bcard">
+          <div class="bhead">
+            <h4>idle CPU</h4>
+            <span class="badge">2.4×</span>
+          </div>
+          <div class="duo">
+            <div class="drow"><span class="track"><i class="fill z" style="width:41.4%"></i></span><span class="val z">1.10%</span></div>
+            <div class="drow"><span class="track"><i class="fill c" style="width:100%"></i></span><span class="val c">2.66%</span></div>
+          </div>
+          <p class="micro">Of one core, while doing nothing. Doing nothing is a workload now.</p>
+        </div>
+
+        <div class="bcard">
+          <div class="bhead">
+            <h4>terminal frame rate</h4>
+            <span class="badge">2.1×</span>
+          </div>
+          <div class="duo">
+            <div class="drow"><span class="track"><i class="fill z" style="width:100%"></i></span><span class="val z">125fps</span></div>
+            <div class="drow"><span class="track"><i class="fill c" style="width:47.2%"></i></span><span class="val c">59fps, stock WebView</span></div>
+          </div>
+          <p class="micro">
+            The one graph where longer is better. zero on a ProMotion display against WKWebView’s
+            default 60fps clamp — Safari was the control, so the machine was never the limit.
+          </p>
+        </div>
       </div>
-      <p class="note">
-        It gets wider the more projects you open: each one costs Cursor about 360MB and three
-        processes, linearly — a window per folder. zero opens a tab, and its process count never
-        moves off five. Also: 125fps terminal scrolling on a ProMotion display, against the stock
-        WebView’s 59.
-      </p>
+
       <aside class="caveat">
         The caveat that matters: Cursor does enormously more — language servers, extensions,
         debugging, an actual AI product. Most of the gap above is that difference priced in bytes and
@@ -302,7 +396,7 @@ const STATS = [
           <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.branch} />worktrees, not branches</h3>
           <p>
             The sidebar lists every worktree with its changes, staging and commit box. Which is the
-            shape of the work when several agents are going at once.
+            shape of the work when several sessions are going at once.
           </p>
         </div>
         <div class="card">
@@ -362,6 +456,17 @@ const STATS = [
       </div>
     </section>
 
+    <section class="platform">
+      <p class="phead">Apple Silicon only. macOS 26 only. On purpose.</p>
+      <p class="pbody">
+        zero is purpose-built for exactly one platform. No Intel branch, no Electron, no compatibility
+        ballast for a MacBook from 2017 — and it leans on macOS for everything macOS is already good
+        at: the WebView, the transcriber, the fonts. Building for one machine instead of every machine
+        is why the whole app is 14MB and why it opens before your finger leaves the trackpad.
+        Purpose-built isn’t the fine print here. It’s the trick.
+      </p>
+    </section>
+
     <section id="install" class="install">
       <h2>install</h2>
       <div class="brew">
@@ -370,22 +475,11 @@ const STATS = [
       </div>
       <p class="alt">
         Or <a href={DMG}>download the dmg</a><span class="release-extra"></span>
-        and drag zero to Applications. Apple Silicon, macOS, <code>git</code> — nothing else.
+        and drag zero to Applications. Apple Silicon, macOS 26, <code>git</code> — nothing else.
       </p>
-      <aside class="unsigned">
-        <h3>about the “damaged” message</h3>
-        <p>
-          The app isn’t signed — a proper signature needs an Apple Developer account, and $99 a year
-          buys a lot of nothing. So macOS quarantines the download and announces that zero “is damaged
-          and can’t be opened”. It isn’t damaged; that’s the message for <em>unsigned</em>. Homebrew
-          clears the flag itself, which is the whole reason to prefer it. After a manual download,
-          clear it yourself, once:
-        </p>
-        <code class="block">xattr -dr com.apple.quarantine /Applications/zero.app</code>
-      </aside>
-      <p class="fine">
-        Or <a href={`${GITHUB}#or-build-it`}>build it from source</a> in about a minute. The whole
-        thing is 17,593 lines — you could read it in an afternoon.
+      <p class="alt">
+        The whole thing is <a href={GITHUB}>open source on GitHub</a> — 17,593 lines of MIT. Read it
+        in an afternoon, or <a href={`${GITHUB}#or-build-it`}>build it yourself</a> in about a minute.
       </p>
     </section>
 
@@ -394,7 +488,7 @@ const STATS = [
         <span class="wordmark">zero</span>
         <div class="foot-links">
           <a href={GITHUB}>github</a>
-          <a href={BENCHMARKS}>benchmarks</a>
+          <a href="#benchmarks">benchmarks</a>
           <a href={`${GITHUB}/releases`}>releases</a>
           <a href={`${GITHUB}/blob/main/LICENSE`}>mit</a>
         </div>
@@ -523,6 +617,11 @@ const STATS = [
     color: var(--text-faint);
   }
 
+  .ic.big {
+    width: 27px;
+    height: 27px;
+  }
+
   section,
   header.hero {
     max-width: 960px;
@@ -530,42 +629,60 @@ const STATS = [
     padding: 72px 24px;
   }
 
-  /* ===== nav ===== */
+  /* ===== nav: a floating glass pill ===== */
 
   nav {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 16px 24px;
-    border-bottom: 1px solid var(--border);
-    background: var(--bg-panel);
+    gap: 26px;
+    padding: 10px 22px;
+    border-radius: 999px;
+    background: rgba(24, 24, 24, 0.55);
+    -webkit-backdrop-filter: blur(16px) saturate(150%);
+    backdrop-filter: blur(16px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 34px rgba(0, 0, 0, 0.4);
+  }
+
+  nav a {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    text-decoration: none;
+    color: var(--text-dim);
+  }
+
+  nav a:hover {
+    color: var(--accent);
   }
 
   .wordmark {
     font-family: var(--font-mono);
-    font-size: 15px;
+    font-size: 14px;
     letter-spacing: 0.35em;
     margin-right: -0.35em;
-    color: var(--text-dim);
+    color: var(--text);
     text-decoration: none;
   }
 
-  .nav-links {
-    display: flex;
-    gap: 22px;
+  .gh {
+    display: inline-flex;
   }
 
-  .nav-links a {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    text-decoration: none;
+  .gh svg {
+    width: 17px;
+    height: 17px;
   }
 
   /* ===== hero ===== */
 
   .hero {
     text-align: center;
-    padding-top: 84px;
+    padding-top: 138px;
   }
 
   .mark {
@@ -599,7 +716,7 @@ const STATS = [
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 14px;
+    gap: 13px;
   }
 
   .brew {
@@ -641,6 +758,10 @@ const STATS = [
     font-size: 14px;
   }
 
+  .cta-alt.oss {
+    font-size: 13px;
+  }
+
   .release-extra {
     font-family: var(--font-mono);
     font-size: 12.5px;
@@ -668,37 +789,29 @@ const STATS = [
     border: 1px solid var(--border);
     border-radius: 10px;
     background: var(--bg-panel);
-    padding: 22px 24px 20px;
+    padding: 24px 24px 22px;
   }
 
-  .stat-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 14px;
+  .stat .ic.big {
+    margin-bottom: 16px;
   }
 
-  .x {
+  .nx {
     font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--green);
-  }
-
-  .stat .n {
-    font-family: var(--font-mono);
-    font-size: clamp(30px, 4vw, 40px);
+    font-size: clamp(40px, 5vw, 54px);
     color: var(--accent);
-    line-height: 1.1;
+    line-height: 1;
+    letter-spacing: -0.02em;
   }
 
   .stat .l {
     color: var(--text-dim);
     font-size: 13.5px;
-    margin-top: 5px;
-    margin-bottom: 16px;
+    margin-top: 8px;
+    margin-bottom: 18px;
   }
 
-  /* the little zero-vs-cursor bar pair, shared by tiles and receipts */
+  /* the zero-vs-cursor bar pair, shared by tiles and the bench cards */
 
   .duo {
     display: flex;
@@ -709,22 +822,15 @@ const STATS = [
 
   .drow {
     display: grid;
-    grid-template-columns: 44px 1fr auto;
+    grid-template-columns: 1fr auto;
     align-items: center;
     gap: 10px;
-  }
-
-  .who {
-    font-family: var(--font-mono);
-    font-size: 10.5px;
-    color: var(--text-faint);
   }
 
   .track {
     height: 4px;
     border-radius: 2px;
     overflow: hidden;
-    background: transparent;
   }
 
   .fill {
@@ -828,8 +934,8 @@ const STATS = [
     color: var(--text);
   }
 
-  /* the ring, to the app's own spec: a white arc with a comet tail while an
-     agent works, over a faint full track; a closed white circle once it's
+  /* the ring, to the app's own spec: a white arc with a comet tail while a
+     session works, over a faint full track; a closed white circle once it's
      quiet and waiting on you */
 
   .ring {
@@ -1015,15 +1121,24 @@ const STATS = [
 
   .point {
     display: grid;
-    grid-template-columns: 72px 1fr;
+    grid-template-columns: 56px 1fr;
     gap: 8px;
   }
 
-  .idx {
-    font-family: var(--font-mono);
-    font-size: 13px;
+  .pt-ic {
+    width: 26px;
+    height: 26px;
     color: var(--text-faint);
-    padding-top: 9px;
+    margin-top: 8px;
+  }
+
+  .pt-ic.rec {
+    color: var(--red);
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    50% { opacity: 0.3; }
   }
 
   .head {
@@ -1033,21 +1148,6 @@ const STATS = [
     line-height: 1.3;
     margin-bottom: 14px;
     letter-spacing: -0.01em;
-  }
-
-  .rec {
-    display: inline-block;
-    width: 0.42em;
-    height: 0.42em;
-    border-radius: 50%;
-    background: var(--red);
-    margin-right: 0.5em;
-    vertical-align: 0.06em;
-    animation: pulse 1.6s ease-in-out infinite;
-  }
-
-  @keyframes pulse {
-    50% { opacity: 0.25; }
   }
 
   .plain {
@@ -1064,46 +1164,253 @@ const STATS = [
     color: var(--text-faint);
   }
 
-  /* ===== receipts ===== */
+  /* ===== benchmarks ===== */
 
   .method {
     color: var(--text-faint);
     font-size: 13.5px;
     margin-bottom: 24px;
-    max-width: 720px;
+    max-width: 760px;
   }
 
-  .sheet {
+  .method .zl {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .bento {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .bcard {
     border: 1px solid var(--border);
     border-radius: 10px;
     background: var(--bg-panel);
-    overflow: hidden;
+    padding: 20px 22px;
+    min-width: 0;
   }
 
-  .rrow {
+  .bcard.span2 {
+    grid-column: span 2;
+  }
+
+  .bhead {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 16px;
+  }
+
+  .bhead h4 {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--accent);
+  }
+
+  .badge {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--green);
+    white-space: nowrap;
+  }
+
+  .micro {
+    margin-top: 14px;
+    font-size: 12.5px;
+    color: var(--text-faint);
+  }
+
+  /* nested squares, area-true */
+
+  .sqwrap {
+    position: relative;
+    height: 128px;
+  }
+
+  .sq {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: block;
+  }
+
+  .sq.c {
+    width: 118px;
+    height: 118px;
+    border: 1px solid var(--bar-c);
+    background: rgba(74, 74, 74, 0.16);
+    border-radius: 3px;
+  }
+
+  .sq.z {
+    width: 9px;
+    height: 9px;
+    background: var(--accent);
+    border-radius: 1.5px;
+  }
+
+  .sqlab {
+    position: absolute;
+    left: 138px;
+    bottom: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  /* launch lollipops on a shared time axis */
+
+  .tl {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .tlrow {
     display: grid;
-    grid-template-columns: 17px 200px 1fr 74px;
-    gap: 18px;
+    grid-template-columns: 150px 1fr;
     align-items: center;
-    padding: 13px 20px;
-    border-bottom: 1px solid var(--border);
+    gap: 16px;
   }
 
-  .rrow:last-child {
-    border-bottom: none;
-  }
-
-  .rlabel {
-    font-size: 13.5px;
+  .tlab {
+    font-size: 12.5px;
     color: var(--text-dim);
   }
 
-  .rx {
+  .ttrack {
+    position: relative;
+    height: 30px;
+  }
+
+  .stem {
+    position: absolute;
+    top: 14px;
+    left: 0;
+    height: 2px;
+    border-radius: 1px;
+  }
+
+  .stem.z { background: var(--accent); z-index: 2; }
+  .stem.c { background: var(--bar-c); }
+
+  .pin {
+    position: absolute;
+    top: 11px;
+    width: 8px;
+    height: 8px;
+    margin-left: -4px;
+    border-radius: 50%;
+  }
+
+  .pin.z { background: var(--accent); z-index: 2; }
+  .pin.c { background: var(--bar-c); }
+
+  .tval {
+    position: absolute;
+    top: -3px;
     font-family: var(--font-mono);
-    font-size: 12.5px;
-    color: var(--green);
-    text-align: right;
+    font-size: 10.5px;
     white-space: nowrap;
+  }
+
+  .tval.z { color: var(--accent); }
+  .tval.c { color: var(--text-faint); }
+
+  .taxis {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 166px;
+    border-top: 1px solid var(--border);
+    padding-top: 5px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-faint);
+  }
+
+  /* memory columns */
+
+  .colwrap {
+    display: flex;
+    gap: 36px;
+    align-items: flex-end;
+  }
+
+  .colgroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .colpair {
+    display: flex;
+    gap: 6px;
+    align-items: flex-end;
+    height: 110px;
+  }
+
+  .colv {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 4px;
+    height: 100%;
+  }
+
+  .cval {
+    font-family: var(--font-mono);
+    font-size: 10px;
+  }
+
+  .cval.z { color: var(--accent); }
+  .cval.c { color: var(--text-faint); }
+
+  .colbar {
+    width: 26px;
+    border-radius: 3px 3px 0 0;
+    display: block;
+  }
+
+  .colbar.z { background: var(--accent); min-height: 3px; }
+  .colbar.c { background: var(--bar-c); }
+
+  .collab {
+    font-size: 11.5px;
+    color: var(--text-faint);
+    text-align: center;
+  }
+
+  /* the zeroes card */
+
+  .zeroes {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .zrow {
+    display: grid;
+    grid-template-columns: 44px 1fr auto;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .zbig {
+    font-family: var(--font-mono);
+    font-size: 40px;
+    line-height: 1;
+    color: var(--accent);
+  }
+
+  .zwhat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
   }
 
   .note {
@@ -1167,51 +1474,42 @@ const STATS = [
     margin-top: 14px;
   }
 
+  /* ===== platform ===== */
+
+  .platform {
+    max-width: none;
+    background: var(--bg-panel);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .phead {
+    font-family: var(--font-mono);
+    font-size: clamp(20px, 3.2vw, 30px);
+    color: var(--accent);
+    letter-spacing: -0.01em;
+    margin-bottom: 18px;
+  }
+
+  .pbody {
+    max-width: 680px;
+    margin: 0 auto;
+    color: var(--text-dim);
+  }
+
   /* ===== install ===== */
 
   .install .brew {
     margin-bottom: 16px;
   }
 
-  .unsigned {
-    margin-top: 30px;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    background: var(--bg-panel);
-    padding: 22px 24px;
+  .install .alt {
     max-width: 720px;
   }
 
-  .unsigned h3 {
-    font-family: var(--font-mono);
-    font-size: 13px;
-    font-weight: 400;
-    color: var(--yellow);
-    margin-bottom: 10px;
-  }
-
-  .unsigned p {
-    color: var(--text-dim);
-    font-size: 13.5px;
-  }
-
-  code.block {
-    display: block;
-    margin-top: 14px;
-    padding: 11px 14px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 7px;
-    font-size: 13px;
-    color: var(--accent);
-    user-select: all;
-    -webkit-user-select: all;
-    overflow-x: auto;
-    white-space: nowrap;
-  }
-
-  .install .fine {
-    margin-top: 24px;
+  .install .alt + .alt {
+    margin-top: 10px;
   }
 
   /* ===== footer ===== */
@@ -1233,6 +1531,10 @@ const STATS = [
     justify-content: space-between;
     align-items: baseline;
     margin-bottom: 26px;
+  }
+
+  footer .wordmark {
+    color: var(--text-dim);
   }
 
   .foot-links {
@@ -1261,12 +1563,17 @@ const STATS = [
     }
 
     .hero {
-      padding-top: 56px;
+      padding-top: 118px;
     }
 
     .mark {
       height: 118px;
       margin-bottom: 30px;
+    }
+
+    nav {
+      gap: 18px;
+      padding: 9px 18px;
     }
 
     .stats {
@@ -1304,17 +1611,28 @@ const STATS = [
 
     .point {
       grid-template-columns: 1fr;
-      gap: 2px;
+      gap: 6px;
     }
 
-    .rrow {
-      grid-template-columns: 17px 1fr 74px;
-      grid-template-rows: auto auto;
-      row-gap: 10px;
+    .pt-ic {
+      margin-top: 0;
     }
 
-    .rrow .duo {
-      grid-column: 1 / -1;
+    .bento {
+      grid-template-columns: 1fr;
+    }
+
+    .bcard.span2 {
+      grid-column: auto;
+    }
+
+    .tlrow {
+      grid-template-columns: 1fr;
+      gap: 4px;
+    }
+
+    .taxis {
+      margin-left: 0;
     }
 
     .foot-row {
@@ -1326,7 +1644,7 @@ const STATS = [
   @media (prefers-reduced-motion: reduce) {
     .ring.working,
     .cursor,
-    .rec {
+    .pt-ic.rec {
       animation: none;
     }
   }

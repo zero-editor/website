@@ -1,0 +1,254 @@
+---
+// Throwaway chooser page for the benchmarks section — three treatments.
+// Not linked from anywhere; delete once one is picked.
+const LOG = (x: number) => (Math.log10(x) / 4) * 100;
+const B_ROWS = [
+  { label: 'Files in the bundle', sub: '5 vs 17,035', x: '3,407×', w: LOG(3407) },
+  { label: 'Shipped JavaScript', sub: '1.4MB vs 256MB', x: '183×', w: LOG(183) },
+  { label: 'App bundle', sub: '14MB vs 860MB', x: '61×', w: LOG(61) },
+  { label: 'Cold launch', sub: '0.38s vs 8.16s', x: '21×', w: LOG(21) },
+  { label: 'Memory, four projects', sub: '243MB vs 1,803MB', x: '7.4×', w: LOG(7.4) },
+  { label: 'Warm launch', sub: '2.39s vs 6.59s', x: '2.8×', w: LOG(2.8) },
+  { label: 'Idle CPU', sub: '1.10% vs 2.66%', x: '2.4×', w: LOG(2.4) },
+  { label: 'Memory, one project', sub: '354MB vs 687MB', x: '1.9×', w: LOG(1.9) },
+];
+const C_BLOCKS = [
+  { x: '61×', l: 'smaller', sub: '14MB vs 860MB' },
+  { x: '21×', l: 'sooner to a window', sub: '0.38s vs 8.16s' },
+  { x: '183×', l: 'less JavaScript', sub: '1.4MB vs 256MB' },
+  { x: '3,407×', l: 'fewer files', sub: '5 vs 17,035' },
+  { x: '∞', l: 'fewer extensions', sub: '0 vs 116' },
+  { x: '∞', l: 'less Electron', sub: '0 vs 259MB' },
+  { x: '7.4×', l: 'lighter, 4 projects', sub: '243MB vs 1,803MB' },
+  { x: '2.4×', l: 'idler at idle', sub: '1.10% vs 2.66%' },
+];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>benchmarks — three treatments</title>
+    <meta name="robots" content="noindex" />
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <main>
+      <header class="vhead">
+        <p>benchmarks section — three treatments. A is live on the main page; say the word and B or C goes in instead.</p>
+      </header>
+
+      <section>
+        <h2>variant a — instrument panel <span>(live)</span></h2>
+        <p class="vdesc">Each metric gets the graph its shape deserves: bars for size, area for JavaScript, a timeline for launch, columns for memory, plain zeroes for the things zero simply doesn’t have.</p>
+        <p class="vnote">— see the main page, section “benchmarks” —</p>
+      </section>
+
+      <section>
+        <h2>variant b — one axis: how many times better</h2>
+        <p class="vdesc">The improvement itself is the bar, on a log scale from 1× to 10,000×. The raw values ride along underneath; the infinities pin to the far edge.</p>
+        <div class="panel">
+          <div class="baxis"><span>1×</span><span>10×</span><span>100×</span><span>1,000×</span><span>10,000×</span></div>
+          {B_ROWS.map((r) => (
+            <div class="brow">
+              <div class="blab">
+                <span class="bname">{r.label}</span>
+                <span class="bsub">{r.sub}</span>
+              </div>
+              <div class="btrack">
+                <i class="bfill" style={`width:${r.w}%`}></i>
+                <span class="bx" style={`left:calc(${r.w}% + 10px)`}>{r.x}</span>
+              </div>
+            </div>
+          ))}
+          <div class="brow">
+            <div class="blab">
+              <span class="bname">Bundled extensions</span>
+              <span class="bsub">0 vs 116</span>
+            </div>
+            <div class="btrack">
+              <i class="bfill inf"></i>
+              <span class="bx pin">∞</span>
+            </div>
+          </div>
+          <div class="brow">
+            <div class="blab">
+              <span class="bname">Bundled runtime</span>
+              <span class="bsub">system WebKit vs 259MB of Electron</span>
+            </div>
+            <div class="btrack">
+              <i class="bfill inf"></i>
+              <span class="bx pin">∞</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>variant c — just the numbers</h2>
+        <p class="vdesc">No graphs at all. The multiplier is the graphic, Apple keynote style; the raw values are the footnote.</p>
+        <div class="cgrid">
+          {C_BLOCKS.map((b) => (
+            <div class="cblock">
+              <div class="cx">{b.x}</div>
+              <div class="cl">{b.l}</div>
+              <div class="csub">{b.sub}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+    </main>
+
+    <style is:global>
+      :root {
+        --bg: #1f1f1f;
+        --bg-panel: #181818;
+        --border: #2b2b2b;
+        --text: #cccccc;
+        --text-dim: #9d9d9d;
+        --text-faint: #656565;
+        --accent: #e6e6e6;
+        --green: #73c991;
+        --bar-c: #4a4a4a;
+        --font-ui: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+        --font-mono: ui-monospace, 'SF Mono', Menlo, Monaco, monospace;
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--font-ui);
+        font-size: 15px;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      main { max-width: 960px; margin: 0 auto; padding: 40px 24px 90px; }
+
+      .vhead p {
+        font-family: var(--font-mono);
+        font-size: 13px;
+        color: var(--text-faint);
+        max-width: 620px;
+      }
+
+      section { margin-top: 64px; }
+
+      h2 {
+        font-family: var(--font-mono);
+        font-size: 14px;
+        font-weight: 400;
+        letter-spacing: 0.18em;
+        color: var(--accent);
+        margin-bottom: 10px;
+      }
+
+      h2 span { color: var(--green); letter-spacing: 0; }
+
+      .vdesc { color: var(--text-dim); font-size: 13.5px; max-width: 640px; margin-bottom: 22px; }
+
+      .vnote {
+        font-family: var(--font-mono);
+        font-size: 12px;
+        color: var(--text-faint);
+        border: 1px dashed var(--border);
+        border-radius: 10px;
+        padding: 26px;
+        text-align: center;
+      }
+
+      .panel {
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background: var(--bg-panel);
+        padding: 18px 22px 22px;
+      }
+
+      .baxis {
+        display: flex;
+        justify-content: space-between;
+        margin-left: 218px;
+        font-family: var(--font-mono);
+        font-size: 10px;
+        color: var(--text-faint);
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 6px;
+        margin-bottom: 14px;
+      }
+
+      .brow {
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        gap: 18px;
+        align-items: center;
+        padding: 7px 0;
+      }
+
+      .blab { display: flex; flex-direction: column; min-width: 0; }
+      .bname { font-size: 13px; color: var(--text-dim); }
+      .bsub { font-family: var(--font-mono); font-size: 10.5px; color: var(--text-faint); }
+
+      .btrack { position: relative; height: 18px; }
+
+      .bfill {
+        position: absolute;
+        top: 6px;
+        left: 0;
+        height: 6px;
+        border-radius: 3px;
+        background: var(--accent);
+        min-width: 3px;
+      }
+
+      .bfill.inf {
+        width: 100%;
+        background: repeating-linear-gradient(90deg, var(--accent) 0 8px, transparent 8px 14px);
+        opacity: 0.85;
+      }
+
+      .bx {
+        position: absolute;
+        top: 0;
+        font-family: var(--font-mono);
+        font-size: 12px;
+        color: var(--green);
+        white-space: nowrap;
+      }
+
+      .bx.pin { right: 0; left: auto; top: -16px; }
+
+      .cgrid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+      }
+
+      .cblock {
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background: var(--bg-panel);
+        padding: 22px 20px 18px;
+      }
+
+      .cx {
+        font-family: var(--font-mono);
+        font-size: clamp(30px, 3.6vw, 44px);
+        line-height: 1;
+        color: var(--accent);
+        letter-spacing: -0.02em;
+      }
+
+      .cl { margin-top: 8px; font-size: 13px; color: var(--text-dim); }
+
+      .csub { margin-top: 4px; font-family: var(--font-mono); font-size: 10.5px; color: var(--text-faint); }
+
+      @media (max-width: 720px) {
+        .brow { grid-template-columns: 1fr; gap: 4px; }
+        .baxis { margin-left: 0; }
+        .cgrid { grid-template-columns: repeat(2, 1fr); }
+      }
+    </style>
+  </body>
+</html>
