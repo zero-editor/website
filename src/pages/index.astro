@@ -1,0 +1,989 @@
+---
+// The whole site is this file. That’s not laziness, it’s a position.
+const REPO = 'zero-editor/zero';
+const GITHUB = `https://github.com/${REPO}`;
+const DMG = `${GITHUB}/releases/latest/download/zero_aarch64.dmg`;
+const BENCHMARKS = `${GITHUB}/blob/main/BENCHMARKS.md`;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>zero — a 14 MB code editor</title>
+    <meta
+      name="description"
+      content="A minimal macOS code editor built around running coding agents. 14 MB, opens in 0.38 seconds, 243 MB with four projects open. press record, ramble, press stop."
+    />
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/icon.png" />
+    <meta name="theme-color" content="#181818" />
+    <meta property="og:title" content="zero — a 14 MB code editor" />
+    <meta
+      property="og:description"
+      content="A minimal macOS code editor built around running coding agents. press record, ramble, press stop."
+    />
+    <meta property="og:type" content="website" />
+    <!-- Swap for /icon.png on the real domain once there is one; og wants absolute URLs. -->
+    <meta property="og:image" content={`https://raw.githubusercontent.com/${REPO}/main/design/icon.png`} />
+    <meta name="twitter:card" content="summary" />
+  </head>
+
+  <body>
+    <nav>
+      <a class="wordmark" href="/">zero</a>
+      <div class="nav-links">
+        <a href="#receipts">receipts</a>
+        <a href="#install">install</a>
+        <a href={GITHUB}>github ↗</a>
+      </div>
+    </nav>
+
+    <header class="hero">
+      <svg class="mark" viewBox="270 182 484 660" aria-hidden="true">
+        <ellipse cx="512" cy="512" rx="220" ry="308" fill="none" stroke="var(--accent)" stroke-width="44"></ellipse>
+      </svg>
+      <p class="kicker">Cursor is an 860&nbsp;MB window around a terminal running Claude&nbsp;Code.</p>
+      <h1>zero is what’s left.</h1>
+      <p class="sub">
+        A 14&nbsp;MB macOS code editor built around running coding agents: projects as tabs, a terminal
+        that takes the whole width, git worktrees down the side, and an editor for when you actually
+        need to read a file. It opens in 0.38&nbsp;seconds and never asks how your onboarding went.
+      </p>
+      <div class="cta">
+        <div class="brew" id="brew">
+          <code>brew install --cask zero-editor/zero/zero</code>
+          <button class="copy" data-copy="brew install --cask zero-editor/zero/zero" aria-label="copy the brew command">copy</button>
+        </div>
+        <p class="cta-alt">
+          or <a href={DMG}>download the dmg</a>
+          <span class="release-extra" id="release-extra"></span>
+        </p>
+      </div>
+      <p class="fine">Apple Silicon · 17,593 lines · MIT · no network code in the app</p>
+    </header>
+
+    <section class="stats" aria-label="the numbers">
+      <div class="stat">
+        <div class="n">14 MB</div>
+        <div class="l">the whole app</div>
+        <div class="vs">cursor: 860 MB</div>
+      </div>
+      <div class="stat">
+        <div class="n">0.38 s</div>
+        <div class="l">cold launch to a window</div>
+        <div class="vs">cursor: 8.16 s</div>
+      </div>
+      <div class="stat">
+        <div class="n">243 MB</div>
+        <div class="l">four projects open</div>
+        <div class="vs">cursor: 1,803 MB</div>
+      </div>
+    </section>
+
+    <section id="demo" class="demo">
+      <div class="window" role="img" aria-label="zero’s title bar: three project tabs, one with a sweeping arc because an agent is working, one with a green ring because it finished, and a full-width terminal below">
+        <div class="titlebar">
+          <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+          <div class="tabs">
+            <span class="tab active"><span class="ring arc"></span>zero</span>
+            <span class="tab"><span class="ring done"></span>api</span>
+            <span class="tab">website</span>
+          </div>
+        </div>
+        <div class="term">
+          <div class="pane">
+            <div class="line"><span class="prompt">zero %</span> claude</div>
+            <div class="line dim">✻ Thinking…</div>
+            <div class="line dim">  ⎿ Reading smoothTermScroll.ts</div>
+          </div>
+          <div class="pane">
+            <div class="line"><span class="prompt">zero %</span> <span class="cursor">▊</span></div>
+          </div>
+        </div>
+      </div>
+      <p class="caption">
+        Projects are tabs. A ring per tab says what Claude is doing — a sweeping arc while it works, a
+        green circle once it’s quiet and waiting on you. The terminal is the point: full width, splits
+        in any direction, no chrome.
+      </p>
+    </section>
+
+    <section id="receipts" class="receipts">
+      <h2>receipts</h2>
+      <p class="method">
+        Same machine, same project, both editors, three launches each, median reported.
+        M3&nbsp;Max · 36&nbsp;GB · macOS&nbsp;26.5.1 · Cursor&nbsp;3.15.6.
+      </p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th></th><th>zero</th><th>cursor</th><th></th></tr>
+          </thead>
+          <tbody>
+            <tr><td>App bundle</td><td class="z">14 MB</td><td class="c">860 MB</td><td class="x">61×</td></tr>
+            <tr><td>Files in the bundle</td><td class="z">5</td><td class="c">17,035</td><td class="x"></td></tr>
+            <tr><td>Shipped JavaScript</td><td class="z">1.4 MB</td><td class="c">256 MB in 12,021 files</td><td class="x">183×</td></tr>
+            <tr><td>Bundled runtime</td><td class="z">none — system WebKit</td><td class="c">259 MB of Electron</td><td class="x"></td></tr>
+            <tr><td>Bundled extensions</td><td class="z">0</td><td class="c">116</td><td class="x"></td></tr>
+            <tr><td>Cold launch</td><td class="z">0.38 s</td><td class="c">8.16 s</td><td class="x">21×</td></tr>
+            <tr><td>Warm launch, window / usable</td><td class="z">0.40 / 2.39 s</td><td class="c">1.14 / 6.59 s</td><td class="x"></td></tr>
+            <tr><td>Memory, one project</td><td class="z">354 MB</td><td class="c">687 MB</td><td class="x">1.9×</td></tr>
+            <tr><td>Idle CPU</td><td class="z">1.10%</td><td class="c">2.66%</td><td class="x">2.4×</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">
+        It gets wider the more projects you open: each one costs Cursor about 360&nbsp;MB and three
+        processes, linearly — a window per folder. zero opens a tab, and its process count never moves
+        off five. ~2× at one project, ~7× at four. Also: 125&nbsp;fps terminal scrolling on a ProMotion
+        display, against the stock WebView’s 59.
+      </p>
+      <aside class="caveat">
+        The caveat that matters: Cursor does enormously more — language servers, extensions, debugging,
+        an actual AI product. Most of the gap above is that difference priced in bytes and
+        milliseconds, not better engineering. We just noticed which part you were using.
+        <a href={BENCHMARKS}>Method, caveats, and the scripts to reproduce it →</a>
+      </aside>
+    </section>
+
+    <section class="features">
+      <h2>what’s in it</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>projects are tabs</h3>
+          <p>
+            Each keeps its own terminals, sidebar and open files. Switching is a compositor swap —
+            everything stays laid out and painted, nothing re-fits when you come back.
+          </p>
+        </div>
+        <div class="card">
+          <h3>the terminal is the point</h3>
+          <p>
+            Full window width, splits in any direction, draggable dividers. No title, no bar, no rule —
+            buttons appear only when the pointer goes looking for them.
+          </p>
+        </div>
+        <div class="card">
+          <h3>worktrees, not branches</h3>
+          <p>
+            The sidebar lists every worktree with its changes, staging and commit box. Which is the
+            shape of the work when several agents are going at once.
+          </p>
+        </div>
+        <div class="card">
+          <h3>bars for what you changed</h3>
+          <p>
+            Green for added, blue for edited, a red wedge where lines were deleted — in the gutter,
+            again beside the scrollbar, and up the file tree, so an edit three folders deep is visible
+            without opening anything.
+          </p>
+        </div>
+        <div class="card">
+          <h3>⌘P, and search in Rust</h3>
+          <p>
+            Fuzzy go-to-file over what git will admit to, so <code>node_modules</code> never appears.
+            Project search runs in-process: 53&nbsp;ms warm on a 6,777-file repo, where ripgrep took 83.
+          </p>
+        </div>
+        <div class="card">
+          <h3>143 languages</h3>
+          <p>
+            The seven zero is written in are compiled in; the rest load the first time you open one, so
+            a project with no Ruby in it never pays for the Ruby mode.
+          </p>
+        </div>
+        <div class="card">
+          <h3>120 fps in a WebView</h3>
+          <p>
+            WKWebView clamps rendering to 60&nbsp;fps. Safari turns the clamp off through a private
+            flag, so zero flips the same one at startup. This rules out the Mac App Store forever,
+            which we’ve decided to live with.
+          </p>
+        </div>
+        <div class="card">
+          <h3>⌘-click anything</h3>
+          <p>
+            A name in the editor opens where it’s defined, through path aliases. A path in the terminal
+            opens beside it — <code>file.ts:42</code> lands on the line — and URLs open in your browser.
+          </p>
+        </div>
+        <div class="card">
+          <h3>it opens how you left it</h3>
+          <p>
+            Projects, splits, sidebar, tabs — restored. The shells are new, because they die with the
+            app; <code>claude --continue</code> picks the conversation back up, which is the part you
+            wanted.
+          </p>
+        </div>
+      </div>
+      <div class="card wide">
+        <h3>what’s not in it</h3>
+        <p>
+          An extension marketplace. A sign-in. A welcome tour. A release-notes popup. A settings sync
+          service. Network code of any kind — the only thing that ever leaves this Mac is what you were
+          already typing into <code>claude</code>. The absence is the feature.
+        </p>
+      </div>
+    </section>
+
+    <section id="memos" class="memos">
+      <p class="kicker">voice memos, per project</p>
+      <p class="big"><span class="rec" aria-hidden="true"></span>press record, ramble, press stop.</p>
+      <p class="body">
+        Talk at your project instead of typing at it. Transcription is the one built into macOS, so it
+        happens on this Mac — then a single <code>claude -p</code> pass turns four minutes of thinking
+        out loud into the memo you would have typed if typing were the mood. Follow-ups record on top
+        and merge into the same document. And it’s files all the way down: audio, raw transcripts, the
+        document itself, all in <code>.zero/memos/</code>, all greppable, none of it in anyone’s cloud.
+      </p>
+      <p class="fine">
+        Memos need macOS 26 — the transcriber is the system’s; nothing else in zero does. Each project
+        keeps a <code>ZERO.md</code> of its proper nouns, so the recogniser stops hearing “Anthropic”
+        as “entropic”.
+      </p>
+    </section>
+
+    <section id="install" class="install">
+      <h2>install</h2>
+      <div class="brew">
+        <code>brew install --cask zero-editor/zero/zero</code>
+        <button class="copy" data-copy="brew install --cask zero-editor/zero/zero" aria-label="copy the brew command">copy</button>
+      </div>
+      <p class="alt">
+        Or <a href={DMG}>download the dmg</a><span class="release-extra" id="release-extra-2"></span>
+        and drag zero to Applications. Apple Silicon, macOS, <code>git</code> — nothing else.
+      </p>
+      <aside class="unsigned">
+        <h3>about the “damaged” message</h3>
+        <p>
+          The app isn’t signed — a proper signature needs an Apple Developer account, and $99 a year
+          buys a lot of nothing. So macOS quarantines the download and announces that zero “is damaged
+          and can’t be opened”. It isn’t damaged; that’s the message for <em>unsigned</em>. Homebrew
+          clears the flag itself, which is the whole reason to prefer it. After a manual download,
+          clear it yourself, once:
+        </p>
+        <code class="block">xattr -dr com.apple.quarantine /Applications/zero.app</code>
+      </aside>
+      <p class="fine">
+        Or <a href={`${GITHUB}#or-build-it`}>build it from source</a> in about a minute. The whole
+        thing is 17,593 lines — you could read it in an afternoon.
+      </p>
+    </section>
+
+    <footer>
+      <div class="foot-row">
+        <span class="wordmark">zero</span>
+        <div class="foot-links">
+          <a href={GITHUB}>github</a>
+          <a href={BENCHMARKS}>benchmarks</a>
+          <a href={`${GITHUB}/releases`}>releases</a>
+          <a href={`${GITHUB}/blob/main/LICENSE`}>mit</a>
+        </div>
+      </div>
+      <p>Made by Lucian and Vid — from Slovenia, with love and a small <code>phys_footprint</code>.</p>
+      <p>It’s zero, not Zero. Even at the start of a sentence. Especially there.</p>
+      <p id="page-weight">
+        This page is one HTML file with no framework in it — about 8&nbsp;KB over the wire, a third of
+        what the average one of Cursor’s 12,021 JavaScript files weighs.
+      </p>
+    </footer>
+
+    <script is:inline>
+      // The site’s entire JavaScript: ask GitHub what the newest release is,
+      // and make the copy buttons copy. If any of it fails, the page has
+      // already said everything it needed to.
+      (async () => {
+        try {
+          const r = await fetch('https://api.github.com/repos/zero-editor/zero/releases/latest');
+          if (!r.ok) return;
+          const rel = await r.json();
+          const v = (rel.tag_name || '').replace(/^v/, '');
+          const date = rel.published_at
+            ? new Date(rel.published_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+            : '';
+          const dmg = (rel.assets || []).find((a) => a.name === 'zero_aarch64.dmg');
+          const size = dmg ? `${(dmg.size / 1048576).toFixed(1)} MB` : '';
+          const bits = [v && `v${v}`, date, size].filter(Boolean).join(' · ');
+          if (!bits) return;
+          for (const el of document.querySelectorAll('.release-extra')) {
+            el.textContent = ` — ${bits}`;
+          }
+        } catch {}
+      })();
+
+      for (const btn of document.querySelectorAll('.copy')) {
+        btn.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(btn.dataset.copy);
+            btn.textContent = 'copied';
+            setTimeout(() => (btn.textContent = 'copy'), 1600);
+          } catch {}
+        });
+      }
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  /* Tokens lifted from the app’s App.css. The accent isn’t a hue: everything
+     that wants to stand out here does it by being brighter, which is the only
+     axis this theme has. */
+  :root {
+    --bg: #1f1f1f;
+    --bg-panel: #181818;
+    --border: #2b2b2b;
+    --text: #cccccc;
+    --text-dim: #9d9d9d;
+    --text-faint: #656565;
+    --accent: #e6e6e6;
+    --green: #73c991;
+    --red: #f14c4c;
+    --yellow: #e2c08d;
+    --font-ui: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    --font-mono: ui-monospace, 'SF Mono', Menlo, Monaco, 'Cascadia Mono', monospace;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    background: var(--bg);
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-ui);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  a {
+    color: var(--text-dim);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--border);
+    transition: color 120ms;
+  }
+
+  a:hover {
+    color: var(--accent);
+  }
+
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.92em;
+  }
+
+  h2 {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.25em;
+    color: var(--text-faint);
+    text-transform: lowercase;
+    margin-bottom: 28px;
+  }
+
+  section,
+  header.hero {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 72px 24px;
+  }
+
+  /* ===== nav ===== */
+
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-panel);
+  }
+
+  .wordmark {
+    font-family: var(--font-mono);
+    font-size: 15px;
+    letter-spacing: 0.35em;
+    margin-right: -0.35em;
+    color: var(--text-dim);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 22px;
+  }
+
+  .nav-links a {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    text-decoration: none;
+  }
+
+  /* ===== hero ===== */
+
+  .hero {
+    text-align: center;
+    padding-top: 84px;
+  }
+
+  .mark {
+    height: 168px;
+    margin-bottom: 40px;
+    opacity: 0.9;
+  }
+
+  .kicker {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text-faint);
+    margin-bottom: 14px;
+  }
+
+  h1 {
+    font-size: clamp(34px, 6vw, 58px);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--accent);
+    line-height: 1.1;
+    margin-bottom: 22px;
+  }
+
+  .sub {
+    max-width: 640px;
+    margin: 0 auto 36px;
+    color: var(--text-dim);
+  }
+
+  .cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .brew {
+    display: inline-flex;
+    align-items: center;
+    gap: 18px;
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 13px 18px;
+  }
+
+  .brew code {
+    font-size: 13.5px;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  .copy {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: var(--text-faint);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 3px 8px;
+    cursor: pointer;
+    transition: color 120ms, border-color 120ms;
+  }
+
+  .copy:hover {
+    color: var(--accent);
+    border-color: var(--text-faint);
+  }
+
+  .cta-alt,
+  .install .alt {
+    color: var(--text-dim);
+    font-size: 14px;
+  }
+
+  .release-extra {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--text-faint);
+  }
+
+  .fine {
+    margin-top: 26px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-faint);
+  }
+
+  /* ===== stats ===== */
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    padding-top: 0;
+  }
+
+  .stat {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg-panel);
+    padding: 26px 24px;
+  }
+
+  .stat .n {
+    font-family: var(--font-mono);
+    font-size: clamp(30px, 4vw, 42px);
+    color: var(--accent);
+    line-height: 1.15;
+  }
+
+  .stat .l {
+    color: var(--text-dim);
+    font-size: 13.5px;
+    margin-top: 6px;
+  }
+
+  .stat .vs {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-faint);
+    margin-top: 12px;
+  }
+
+  /* ===== demo window ===== */
+
+  .demo {
+    padding-top: 8px;
+    text-align: center;
+  }
+
+  .window {
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: left;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
+    overflow: hidden;
+  }
+
+  .titlebar {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--bg-panel);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 12px;
+  }
+
+  .dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    flex: none;
+  }
+
+  .dot.r { background: #f1584c; }
+  .dot.y { background: #e2c08d; }
+  .dot.g { background: #73c991; }
+
+  .tabs {
+    display: flex;
+    gap: 4px;
+    margin-left: 14px;
+    overflow: hidden;
+  }
+
+  .tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-faint);
+    padding: 4px 11px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+
+  .tab.active {
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  .ring {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    flex: none;
+  }
+
+  .ring.arc {
+    background: conic-gradient(var(--accent) 0 110deg, transparent 110deg 360deg);
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px));
+    mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2.5px));
+    animation: sweep 1.8s linear infinite;
+  }
+
+  .ring.done {
+    border: 1.5px solid var(--green);
+  }
+
+  @keyframes sweep {
+    to { transform: rotate(360deg); }
+  }
+
+  .term {
+    display: grid;
+    grid-template-columns: 1.7fr 1fr;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.75;
+    min-height: 118px;
+  }
+
+  .pane {
+    padding: 16px 16px 20px;
+  }
+
+  .pane + .pane {
+    border-left: 1px solid var(--border);
+  }
+
+  .prompt {
+    color: var(--text-dim);
+  }
+
+  .line.dim {
+    color: var(--text-faint);
+  }
+
+  .cursor {
+    animation: blink 1.2s step-end infinite;
+    color: var(--text-dim);
+  }
+
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+
+  .caption {
+    max-width: 620px;
+    margin: 28px auto 0;
+    color: var(--text-dim);
+    font-size: 14px;
+  }
+
+  /* ===== receipts ===== */
+
+  .method {
+    color: var(--text-faint);
+    font-size: 13.5px;
+    margin-bottom: 24px;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg-panel);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    min-width: 560px;
+  }
+
+  th {
+    font-family: var(--font-mono);
+    font-weight: 400;
+    font-size: 12px;
+    color: var(--text-faint);
+    text-align: left;
+    padding: 12px 18px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  td {
+    padding: 10px 18px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-dim);
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  td.z {
+    font-family: var(--font-mono);
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  td.c {
+    font-family: var(--font-mono);
+    color: var(--text-faint);
+  }
+
+  td.x {
+    font-family: var(--font-mono);
+    color: var(--green);
+    text-align: right;
+  }
+
+  .note {
+    color: var(--text-dim);
+    font-size: 14px;
+    margin-top: 22px;
+    max-width: 720px;
+  }
+
+  .caveat {
+    margin-top: 26px;
+    padding: 18px 20px;
+    border-left: 2px solid var(--border);
+    color: var(--text-faint);
+    font-size: 13.5px;
+    max-width: 720px;
+  }
+
+  .caveat a {
+    display: inline-block;
+    margin-top: 8px;
+  }
+
+  /* ===== features ===== */
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 14px;
+  }
+
+  .card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg-panel);
+    padding: 20px 22px;
+  }
+
+  .card h3 {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+
+  .card p {
+    color: var(--text-dim);
+    font-size: 13.5px;
+  }
+
+  .card.wide {
+    margin-top: 14px;
+  }
+
+  /* ===== memos ===== */
+
+  .memos {
+    text-align: center;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    max-width: none;
+    background: var(--bg-panel);
+  }
+
+  .memos .kicker {
+    margin-bottom: 20px;
+  }
+
+  .big {
+    font-family: var(--font-mono);
+    font-size: clamp(24px, 4.6vw, 46px);
+    color: var(--accent);
+    line-height: 1.25;
+    margin-bottom: 26px;
+    letter-spacing: -0.01em;
+  }
+
+  .rec {
+    display: inline-block;
+    width: 0.42em;
+    height: 0.42em;
+    border-radius: 50%;
+    background: var(--red);
+    margin-right: 0.5em;
+    vertical-align: 0.06em;
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    50% { opacity: 0.25; }
+  }
+
+  .memos .body {
+    max-width: 660px;
+    margin: 0 auto;
+    color: var(--text-dim);
+  }
+
+  .memos .fine {
+    max-width: 660px;
+    margin: 22px auto 0;
+  }
+
+  /* ===== install ===== */
+
+  .install .brew {
+    margin-bottom: 16px;
+  }
+
+  .unsigned {
+    margin-top: 30px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg-panel);
+    padding: 22px 24px;
+    max-width: 720px;
+  }
+
+  .unsigned h3 {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--yellow);
+    margin-bottom: 10px;
+  }
+
+  .unsigned p {
+    color: var(--text-dim);
+    font-size: 13.5px;
+  }
+
+  code.block {
+    display: block;
+    margin-top: 14px;
+    padding: 11px 14px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    font-size: 13px;
+    color: var(--accent);
+    user-select: all;
+    -webkit-user-select: all;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .install .fine {
+    margin-top: 24px;
+  }
+
+  /* ===== footer ===== */
+
+  footer {
+    border-top: 1px solid var(--border);
+    background: var(--bg-panel);
+    padding: 44px 24px 56px;
+  }
+
+  footer > * {
+    max-width: 960px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .foot-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 26px;
+  }
+
+  .foot-links {
+    display: flex;
+    gap: 20px;
+  }
+
+  .foot-links a {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    text-decoration: none;
+  }
+
+  footer p {
+    color: var(--text-faint);
+    font-size: 13px;
+    margin-top: 8px;
+  }
+
+  /* ===== small screens ===== */
+
+  @media (max-width: 720px) {
+    section,
+    header.hero {
+      padding: 52px 18px;
+    }
+
+    .hero {
+      padding-top: 56px;
+    }
+
+    .mark {
+      height: 120px;
+      margin-bottom: 30px;
+    }
+
+    .stats {
+      grid-template-columns: 1fr;
+    }
+
+    .brew {
+      max-width: 100%;
+      overflow-x: auto;
+    }
+
+    .foot-row {
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* splits go in any direction; on a phone, down */
+    .term {
+      grid-template-columns: 1fr;
+      min-height: 0;
+    }
+
+    .pane + .pane {
+      border-left: none;
+      border-top: 1px solid var(--border);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ring.arc,
+    .cursor,
+    .rec {
+      animation: none;
+    }
+  }
+</style>
