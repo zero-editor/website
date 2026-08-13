@@ -115,7 +115,7 @@ const STATS = [
       ))}
     </section>
     <p class="stats-fine">
-      The bright bar is zero; the long one is Cursor. And twenty-one is measured, not marketing —
+      The bright bar is zero; the long one is Cursor —
       <a href={BENCHMARKS}>method and scripts →</a>
     </p>
 
@@ -186,11 +186,11 @@ const STATS = [
             one, the terminals and splits stay exactly where you arranged them. The ring on a tab is
             that project’s pulse — sweeping while something is running, a closed circle once it’s
             quiet and waiting on you. One look across the top of the window and you know where
-            everything stands. No window juggling, no “which terminal beeped”.
+            everything stands.
           </p>
           <p class="tech">
             It reads each shell’s process tree and how long the pty has been silent, once a second.
-            Nothing to configure, nothing to integrate — the ring just knows.
+            Nothing to configure, nothing to integrate.
           </p>
         </div>
       </div>
@@ -216,7 +216,7 @@ const STATS = [
           <p class="head">it’s barely even there.</p>
           <p class="plain">
             14MB on disk. A window in 0.38s. A quarter of a gigabyte with four projects open. Your RAM
-            goes to the work, not to the app it runs in — an editor should be a tool, not a tenant.
+            goes to the work, not to the app it runs in.
           </p>
           <p class="tech">
             Numbers below, method in BENCHMARKS.md, scripts in bench/ if you’d like to run them on
@@ -230,7 +230,7 @@ const STATS = [
       <h2>benchmarks</h2>
       <p class="method">
         Same machine, same project, both editors, three launches each, median reported.
-        M3&nbsp;Max · 36GB · macOS&nbsp;26.5.1 · Cursor&nbsp;3.15.6. We didn’t have to cherry-pick.
+        M3&nbsp;Max · 36GB · macOS&nbsp;26.5.1 · Cursor&nbsp;3.15.6.
         In every graph: <b class="zl">zero is the bright mark</b>; the long grey one is Cursor.
       </p>
 
@@ -244,7 +244,7 @@ const STATS = [
             <div class="drow"><span class="track"><i class="fill z" style="width:1.63%"></i></span><span class="val z">14MB</span></div>
             <div class="drow"><span class="track"><i class="fill c" style="width:100%"></i></span><span class="val c">860MB</span></div>
           </div>
-          <p class="micro">And 5 files in the bundle, against 17,035 — 3,407× fewer things that can be wrong.</p>
+          <p class="micro">And 5 files in the bundle, against 17,035 — 3,407× fewer.</p>
         </div>
 
         <div class="bcard">
@@ -290,8 +290,8 @@ const STATS = [
             <div class="taxis"><span>0s</span><span>3s</span><span>6s</span><span>9s</span></div>
           </div>
           <p class="micro">
-            Two different finish lines, not a typo: a window on screen first, ready-to-work second.
-            A cold zero puts its window up before a warm Cursor does — 0.38s against 1.14s.
+            Two different finish lines: a window on screen first, ready-to-work second. A cold zero
+            puts its window up before a warm Cursor does — 0.38s against 1.14s.
           </p>
         </div>
 
@@ -369,7 +369,7 @@ const STATS = [
             <div class="drow"><span class="track"><i class="fill z" style="width:41.4%"></i></span><span class="val z">1.10%</span></div>
             <div class="drow"><span class="track"><i class="fill c" style="width:100%"></i></span><span class="val c">2.66%</span></div>
           </div>
-          <p class="micro">Of one core, while doing nothing. Doing nothing is a workload now.</p>
+          <p class="micro">Of one core, while doing nothing.</p>
         </div>
 
         <div class="bcard">
@@ -391,7 +391,7 @@ const STATS = [
       <aside class="caveat">
         The caveat that matters: Cursor does enormously more — language servers, extensions,
         debugging, an actual AI product. Most of the gap above is that difference priced in bytes and
-        milliseconds, not better engineering. We just noticed which part you were using.
+        milliseconds, not better engineering.
         <a href={BENCHMARKS}>Method, caveats, and the scripts to reproduce it →</a>
       </aside>
     </section>
@@ -445,19 +445,18 @@ const STATS = [
         <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.slash} />what’s not in it</h3>
         <p>
           An extension marketplace. A sign-in. A welcome tour. A chat panel you can’t close. Network
-          code of any kind. The absence is the feature.
+          code of any kind.
         </p>
       </div>
     </section>
 
     <section class="platform">
-      <p class="phead">Apple Silicon only. macOS 26 only. On purpose.</p>
+      <p class="phead">Apple Silicon only. macOS 26 only.</p>
       <p class="pbody">
         zero is purpose-built for exactly one platform. No Intel branch, no Electron, no compatibility
         ballast for a MacBook from 2017 — and it leans on macOS for everything macOS is already good
         at: the WebView, the transcriber, the fonts. Building for one machine instead of every machine
-        is why the whole app is 14MB and why it opens before your finger leaves the trackpad.
-        Purpose-built isn’t the fine print here. It’s the trick.
+        is why the whole app is 14MB and why it opens in 0.38s.
       </p>
     </section>
 

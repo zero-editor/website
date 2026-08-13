@@ -26,3 +26,4 @@
 - dist/ — heard as "dist", "disk", or "dissed"; the build output directory
 - localhost:4321 — the port digits are easily garbled
 - Cursor — misheard as: cursor (suggested)
+- Apple silicon — misheard as: apple silicon (suggested)
