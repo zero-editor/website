@@ -506,11 +506,9 @@ const STATS = [
       </div>
       <p class="made-by">
         Made by
-        <a class="who" href="https://github.com/vidvidvid">
-          <img src="https://github.com/vidvidvid.png?size=48" alt="" width="18" height="18" loading="lazy" />vidvidvid</a>
+        <a class="who" href="https://github.com/vidvidvid"><img src="https://github.com/vidvidvid.png?size=48" alt="" width="18" height="18" loading="lazy" />vidvidvid</a>
         and
-        <a class="who" href="https://github.com/loucyan">
-          <img src="https://github.com/loucyan.png?size=48" alt="" width="18" height="18" loading="lazy" />loucyan</a>
+        <a class="who" href="https://github.com/loucyan"><img src="https://github.com/loucyan.png?size=48" alt="" width="18" height="18" loading="lazy" />loucyan</a>
         — from Slovenia, with love and a small <code>phys_footprint</code>.
       </p>
     </footer>
@@ -1628,7 +1626,11 @@ const STATS = [
     height: 18px;
     border-radius: 50%;
     vertical-align: -4px;
-    margin-right: 5px;
+    /* An 18px disc needs more room than the ~3.5px word space the markup
+       gives it. Match the gap on both sides so the avatar sits in the
+       sentence rather than crowding the word before it. */
+    margin-left: 4px;
+    margin-right: 6px;
     /* The only two colour images on the page. Keep them as quiet as the rest
        of the footer until someone looks at them. */
     filter: grayscale(1);
