@@ -87,15 +87,15 @@ const STATS = [
       </p>
       <div class="cta">
         <div class="brew">
-          <code>brew install --cask zero-editor/zero/zero</code>
-          <button class="copy" data-copy="brew install --cask zero-editor/zero/zero" aria-label="copy the brew command">copy</button>
+          <code>brew install --cask zero-editor/tap/zero</code>
+          <button class="copy" data-copy="brew install --cask zero-editor/tap/zero" aria-label="copy the brew command">copy</button>
         </div>
         <p class="cta-alt">
           or <a href={DMG}>download the dmg</a>
           <span class="release-extra"></span>
         </p>
         <p class="cta-alt oss">
-          Open source, MIT — <a href={GITHUB}>all 17,593 lines of it on GitHub</a>.
+          Open source, MIT — <a href={GITHUB}>all 21,376 lines of it on GitHub</a>.
         </p>
       </div>
       <p class="fine">Apple Silicon · macOS 26 · no network code in the app</p>
@@ -200,15 +200,13 @@ const STATS = [
         <div>
           <p class="head">you always know what’s running.</p>
           <p class="plain">
-            zero is built for having several things going at once. Every project is a tab; inside each
-            one, the terminals and splits stay exactly where you arranged them. The ring on a tab is
-            that project’s pulse — sweeping while something is running, a closed circle once it’s
-            quiet and waiting on you. One look across the top of the window and you know where
-            everything stands.
+            Every project is a tab, and the ring on it is that project’s pulse — sweeping while
+            something is running, a closed circle once it’s waiting on you. One look across the top
+            and you know where everything stands.
           </p>
           <p class="tech">
-            It reads each shell’s process tree and how long the pty has been silent, once a second.
-            Nothing to configure, nothing to integrate.
+            Read from each shell’s process tree and how long the pty has been silent, once a second.
+            Nothing to configure.
           </p>
         </div>
       </div>
@@ -218,13 +216,12 @@ const STATS = [
           <p class="head">press record, ramble, press stop.</p>
           <p class="plain">
             Talk at your project instead of typing at it. Your Mac writes down what you said, claude
-            tidies it into the note you meant, and recording on top of a memo folds the new thoughts
-            in. Four minutes of thinking out loud, one document you’d actually show someone.
+            tidies it into the note you meant, and recording again folds the new thoughts in. Four
+            minutes of rambling, one document you’d actually show someone.
           </p>
           <p class="tech">
-            Transcription is macOS 26’s own, on this Mac. One claude -p pass makes the concise
-            version. It’s files all the way down — audio, transcripts, document, all in .zero/memos/ —
-            and a ZERO.md of proper nouns keeps “Anthropic” from coming back as “entropic”.
+            Transcription is macOS 26’s own, on this Mac; one claude -p pass makes the concise
+            version. Audio, transcripts and document all land in .zero/memos/.
           </p>
         </div>
       </div>
@@ -237,8 +234,7 @@ const STATS = [
             goes to the work, not to the app it runs in.
           </p>
           <p class="tech">
-            Numbers below, method in BENCHMARKS.md, scripts in bench/ if you’d like to run them on
-            your own machine.
+            Numbers below, method in BENCHMARKS.md, scripts in bench/ to run on your own machine.
           </p>
         </div>
       </div>
@@ -481,15 +477,15 @@ const STATS = [
     <section id="install" class="install">
       <h2>install</h2>
       <div class="brew">
-        <code>brew install --cask zero-editor/zero/zero</code>
-        <button class="copy" data-copy="brew install --cask zero-editor/zero/zero" aria-label="copy the brew command">copy</button>
+        <code>brew install --cask zero-editor/tap/zero</code>
+        <button class="copy" data-copy="brew install --cask zero-editor/tap/zero" aria-label="copy the brew command">copy</button>
       </div>
       <p class="alt">
         Or <a href={DMG}>download the dmg</a><span class="release-extra"></span>
         and drag zero to Applications. Apple Silicon, macOS 26, <code>git</code> — nothing else.
       </p>
       <p class="alt">
-        The whole thing is <a href={GITHUB}>open source on GitHub</a> — 17,593 lines of MIT. Read it
+        The whole thing is <a href={GITHUB}>open source on GitHub</a> — 21,376 lines of MIT. Read it
         in an afternoon, or <a href={`${GITHUB}#or-build-it`}>build it yourself</a> in about a minute.
       </p>
     </section>
@@ -1199,22 +1195,20 @@ const STATS = [
   /* ===== the three points ===== */
 
   .points {
-    display: flex;
-    flex-direction: column;
-    gap: 64px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
   }
 
   .point {
-    display: grid;
-    grid-template-columns: 56px 1fr;
-    gap: 8px;
+    display: block;
   }
 
   .pt-ic {
-    width: 26px;
-    height: 26px;
+    width: 22px;
+    height: 22px;
     color: var(--text-faint);
-    margin-top: 8px;
+    margin-bottom: 14px;
   }
 
   .pt-ic.rec {
@@ -1228,20 +1222,19 @@ const STATS = [
 
   .head {
     font-family: var(--font-mono);
-    font-size: clamp(21px, 3.4vw, 32px);
+    font-size: clamp(18px, 2.2vw, 21px);
     color: var(--accent);
-    line-height: 1.3;
-    margin-bottom: 14px;
+    line-height: 1.35;
+    margin-bottom: 12px;
     letter-spacing: -0.01em;
   }
 
   .plain {
-    max-width: 620px;
     color: var(--text-dim);
+    font-size: 15px;
   }
 
   .tech {
-    max-width: 620px;
     margin-top: 12px;
     font-family: var(--font-mono);
     font-size: 12px;
@@ -1700,13 +1693,9 @@ const STATS = [
       border-top: 1px solid var(--border);
     }
 
-    .point {
+    .points {
       grid-template-columns: 1fr;
-      gap: 6px;
-    }
-
-    .pt-ic {
-      margin-top: 0;
+      gap: 44px;
     }
 
     .bento {
