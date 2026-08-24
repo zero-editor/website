@@ -134,7 +134,12 @@ const STATS = [
             <div class="tabs">
               <span class="tab active"><span class="tsq"><span class="ring working"></span></span>zero<span class="tsq"></span></span>
               <span class="tab"><span class="tsq"><span class="ring done"></span></span>api<span class="tsq"></span></span>
-              <span class="tab"><span class="tsq"></span>website<span class="tsq"></span></span>
+              <span class="tab"><span class="tsq"><svg class="tmark" viewBox="0 0 5 5"><rect x="0.06" y="0.06" width="0.88" height="0.88"/><rect x="2.06" y="0.06" width="0.88" height="0.88"/><rect x="4.06" y="0.06" width="0.88" height="0.88"/><rect x="0.06" y="1.06" width="0.88" height="0.88"/><rect x="1.06" y="1.06" width="0.88" height="0.88"/><rect x="2.06" y="1.06" width="0.88" height="0.88"/><rect x="3.06" y="1.06" width="0.88" height="0.88"/><rect x="4.06" y="1.06" width="0.88" height="0.88"/><rect x="0.06" y="3.06" width="0.88" height="0.88"/><rect x="1.06" y="3.06" width="0.88" height="0.88"/><rect x="3.06" y="3.06" width="0.88" height="0.88"/><rect x="4.06" y="3.06" width="0.88" height="0.88"/><rect x="0.06" y="4.06" width="0.88" height="0.88"/><rect x="1.06" y="4.06" width="0.88" height="0.88"/><rect x="3.06" y="4.06" width="0.88" height="0.88"/><rect x="4.06" y="4.06" width="0.88" height="0.88"/></svg></span>website<span class="tsq"></span></span>
+            </div>
+            <div class="tright" aria-hidden="true">
+              <span class="tbtn"><svg width="16" height="16" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="2.1" y="2.6" width="9.8" height="8.8" rx="1.6"/><path d="M5.9 2.6 V11.4"/></svg></span>
+              <span class="tbtn"><svg width="16" height="16" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"><path d="M7 2.6 V11.4 M2.6 7 H11.4"/></svg></span>
+              <span class="tbtn"><svg width="16" height="16" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"><circle cx="7" cy="7" r="2.8"/><path d="M7 2.4 V4.2 M7 9.8 V11.6 M2.4 7 H4.2 M9.8 7 H11.6 M5 5 L3.7 3.7 M9 5 L10.3 3.7 M9 9 L10.3 10.3 M5 9 L3.7 10.3"/></svg></span>
             </div>
           </div>
           <div class="cards">
@@ -178,6 +183,10 @@ const STATS = [
               <div class="cl"><span class="gut"></span><span class="ln">64</span><span class="code"><span class="ind"></span><span class="tk">const</span> <span class="td">rows</span> <span class="tk">=</span> <span class="tv">host</span><span class="tpu">.</span><span class="tp">querySelector</span><span class="tpu">&lt;</span><span class="tt">HTMLElement</span><span class="tpu">&gt;(</span><span class="ts">".xterm-rows"</span><span class="tpu">);</span></span></div>
               <div class="cl"><span class="gut"></span><span class="ln">65</span><span class="code"><span class="ind"></span><span class="tk">if</span> <span class="tpu">(</span><span class="tk">!</span><span class="tv">rows</span> <span class="tk">||</span> <span class="tv">term</span><span class="tpu">.</span><span class="tp">rows</span> <span class="tk">&lt;</span> <span class="tn">1</span><span class="tpu">)</span> <span class="tk">return</span> <span class="tn">0</span><span class="tpu">;</span></span></div>
               <div class="cl"><span class="gut"></span><span class="ln">66</span><span class="code"><span class="ind"></span><span class="tk">const</span> <span class="td">h</span> <span class="tk">=</span> <span class="tv">rows</span><span class="tpu">.</span><span class="tp">getBoundingClientRect</span><span class="tpu">().</span><span class="tp">height</span> <span class="tk">/</span> <span class="tv">term</span><span class="tpu">.</span><span class="tp">rows</span><span class="tpu">;</span></span></div>
+              <div class="cl"><span class="gut"></span><span class="ln">67</span><span class="code"><span class="ind"></span><span class="tk">return</span> <span class="tv">h</span> <span class="tk">&gt;</span> <span class="tn">1</span> <span class="tk">?</span> <span class="tv">h</span> <span class="tk">:</span> <span class="tn">0</span><span class="tpu">;</span></span></div>
+              <div class="cl"><span class="gut"></span><span class="ln">68</span><span class="code"><span class="tpu">{'};'}</span></span></div>
+              <div class="cl"><span class="gut"></span><span class="ln">69</span><span class="code"></span></div>
+              <div class="cl"><span class="gut"></span><span class="ln">70</span><span class="code"><span class="tk">const</span> <span class="td">reset</span> <span class="tk">=</span> <span class="tpu">()</span> <span class="tk">=&gt;</span> <span class="tpu">{'{'}</span></span></div>
               </div>
             </div>
             <div class="card cterm">
@@ -1043,6 +1052,40 @@ const STATS = [
     flex: none;
   }
 
+  /* the drawn stand-in for a project with no icon of its own: a 5×5
+     identicon from the project's path, riding the tab's own brightness
+     (projectIcon.ts / terminals.css) */
+  .tmark {
+    width: 13px;
+    height: 13px;
+    display: block;
+    fill: currentColor;
+    opacity: 0.85;
+  }
+
+  /* the bar's own controls — lock, ＋, gear — pinned to the right inset the
+     tabs never enter, out of the centring math (frame.css .titlebar-right) */
+  .tright {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    color: var(--text-faint);
+  }
+
+  .tbtn {
+    display: flex;
+    align-items: center;
+    padding: 4px 6px;
+  }
+
+  .tbtn svg {
+    display: block;
+  }
+
   /* the ring, to the app's own spec: a white arc with a comet tail while a
      session works, over a faint full track; a closed white circle once it's
      quiet and waiting on you */
@@ -1140,6 +1183,9 @@ const STATS = [
   .window .card {
     border-radius: 10px;
     border: 1px solid var(--pb);
+    /* the features section's .card sets a 20/22px padding at lower
+       specificity; the window's cards size themselves */
+    padding: 0;
     box-shadow: 0 10px 24px -12px rgba(0, 0, 0, 0.6), 0 2px 6px -2px rgba(0, 0, 0, 0.35);
     overflow: hidden;
     min-width: 0;
@@ -1809,6 +1855,11 @@ const STATS = [
 
     .window .cards {
       grid-template-columns: 1fr;
+    }
+
+    /* the phone hasn't the width for both centred tabs and the cluster */
+    .tright {
+      display: none;
     }
 
     .window .card.cside {
