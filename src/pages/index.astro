@@ -40,7 +40,7 @@ const STATS = [
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>zero — a 14MB code editor</title>
+    <title>zero — a code editor for coding agents</title>
     <meta
       name="description"
       content="A minimal macOS code editor built around running coding agents. 14MB, opens in 0.38s, 243MB with four projects open. press record, ramble, press stop."
@@ -49,7 +49,7 @@ const STATS = [
     <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
     <link rel="apple-touch-icon" href="/icon.png" />
     <meta name="theme-color" content="#1f1f1f" />
-    <meta property="og:title" content="zero — a 14MB code editor" />
+    <meta property="og:title" content="zero — a code editor for coding agents" />
     <meta
       property="og:description"
       content="A minimal macOS code editor built around running coding agents. press record, ramble, press stop."
@@ -81,8 +81,9 @@ const STATS = [
       <h1>zero is what’s left.</h1>
       <p class="sub">
         A 14MB macOS code editor built around running coding agents: a terminal that takes the whole
-        width, projects as tabs, git worktrees down the side, and an editor for when you actually need
-        to read one of your files. That’s it — on purpose. It opens in 0.38s and has never once asked
+        width, projects as tabs, git worktrees down the side, a record button that turns four minutes
+        of rambling into a prompt you can hand any AI, and an editor for when you actually need to
+        read one of your files. That’s it — on purpose. It opens in 0.38s and has never once asked
         about your onboarding journey.
       </p>
       <div class="cta">
@@ -232,12 +233,14 @@ const STATS = [
           <p class="head">press record, ramble, press stop.</p>
           <p class="plain">
             Talk at your project instead of typing at it. Your Mac writes down what you said, claude
-            tidies it into the note you meant, and recording again folds the new thoughts in. Four
-            minutes of rambling, one document you’d actually show someone.
+            tidies it into the prompt you meant — ready to hand to any AI, or keep as the note — and
+            recording again folds the new thoughts in. Four minutes of rambling, one document you’d
+            actually show someone.
           </p>
           <p class="tech">
             Transcription is macOS 26’s own, on this Mac; one claude -p pass makes the concise
-            version. Audio, transcripts and document all land in .zero/memos/.
+            version, so Claude Code’s CLI is the one thing it needs. Audio, transcripts and document
+            all land in .zero/memos/.
           </p>
         </div>
       </div>
@@ -497,7 +500,7 @@ const STATS = [
         <button class="copy" data-copy="brew install --cask zero-editor/tap/zero" aria-label="copy the brew command">copy</button>
       </div>
       <p class="alt">
-        Or <a href={DMG}>download the dmg</a><span class="release-extra"></span>
+        Or <a href={DMG}>download the dmg</a><span class="release-extra"></span>{' '}
         and drag zero to Applications. Apple Silicon, macOS 26, <code>git</code> — nothing else.
       </p>
       <p class="alt">
@@ -531,16 +534,23 @@ const STATS = [
       // already said everything it needed to.
       (async () => {
         try {
-          const r = await fetch('https://api.github.com/repos/zero-editor/zero/releases/latest');
+          const r = await fetch('https://api.github.com/repos/zero-editor/zero/releases?per_page=100');
           if (!r.ok) return;
-          const rel = await r.json();
+          const rels = await r.json();
+          const rel = rels[0];
+          if (!rel) return;
           const v = (rel.tag_name || '').replace(/^v/, '');
           const date = rel.published_at
             ? new Date(rel.published_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
             : '';
-          const dmg = (rel.assets || []).find((a) => a.name === 'zero_aarch64.dmg');
+          const findDmg = (rr) => (rr.assets || []).find((a) => a.name === 'zero_aarch64.dmg');
+          const dmg = findDmg(rel);
           const size = dmg ? `${(dmg.size / 1048576).toFixed(1)}MB` : '';
-          const bits = [v && `v${v}`, date, size].filter(Boolean).join(' · ');
+          // Lifetime dmg downloads across every release. Shown only once the
+          // number is doing the page a favour.
+          const total = rels.reduce((n, rr) => n + (findDmg(rr)?.download_count || 0), 0);
+          const downloads = total >= 100 ? `${total.toLocaleString('en-GB')} downloads` : '';
+          const bits = [v && `v${v}`, date, size, downloads].filter(Boolean).join(' · ');
           if (!bits) return;
           for (const el of document.querySelectorAll('.release-extra')) {
             el.textContent = ` — ${bits}`;
