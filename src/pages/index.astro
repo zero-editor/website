@@ -305,7 +305,7 @@ const STATS = [
           </div>
           <div class="tl">
             <div class="tlrow">
-              <span class="tlab">first window, cold start</span>
+              <span class="tlab">window on screen · from cold</span>
               <span class="ttrack">
                 <i class="stem c" style="width:68%"></i><i class="pin c" style="left:68%"></i>
                 <i class="stem z" style="width:3.2%"></i><i class="pin z" style="left:3.2%"></i>
@@ -314,7 +314,7 @@ const STATS = [
               </span>
             </div>
             <div class="tlrow">
-              <span class="tlab">ready to work, warm start</span>
+              <span class="tlab">ready to work · warm</span>
               <span class="ttrack">
                 <i class="stem c" style="width:79.3%"></i><i class="pin c" style="left:79.3%"></i>
                 <i class="stem z" style="width:18.6%"></i><i class="pin z" style="left:18.6%"></i>
@@ -325,8 +325,9 @@ const STATS = [
             <div class="taxis"><span>0s</span><span>4s</span><span>8s</span><span>12s</span></div>
           </div>
           <p class="micro">
-            Two different finish lines: a window on screen first, ready-to-work second. A cold zero
-            puts its window up before a warm Cursor does — 0.38s against 1.08s.
+            Two different finish lines, not two clocks on one race: first a window on screen, then
+            the app actually ready. Warm, zero’s window is up in 0.53s to Cursor’s 1.08s — starting
+            cold adds nothing to zero and seven seconds to Cursor.
           </p>
         </div>
 
