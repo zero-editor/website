@@ -30,9 +30,9 @@ const OCTO =
   '<path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>';
 
 const STATS = [
-  { icon: 'box',  x: '61×',  l: 'smaller on disk',                 zv: '14MB',  cv: '860MB',   r: 14 / 860 },
+  { icon: 'box',  x: '44×',  l: 'smaller on disk',                 zv: '19MB',  cv: '845MB',   r: 19 / 845 },
   { icon: 'bolt', x: '21×',  l: 'sooner to a window',              zv: '0.38s', cv: '8.16s',   r: 0.38 / 8.16 },
-  { icon: 'chip', x: '7.4×', l: 'lighter with four projects open', zv: '243MB', cv: '1,803MB', r: 243 / 1803 },
+  { icon: 'chip', x: '2.9×', l: 'lighter with four projects open', zv: '594MB', cv: '1,709MB', r: 594 / 1709 },
 ];
 ---
 
@@ -43,7 +43,7 @@ const STATS = [
     <title>zero — a code editor for coding agents</title>
     <meta
       name="description"
-      content="A minimal macOS code editor built around running coding agents. 14MB, opens in 0.38s, 243MB with four projects open. press record, ramble, press stop."
+      content="A minimal macOS code editor built around running coding agents. 19MB, opens in 0.38s, 594MB with four projects open. press record, ramble, press stop."
     />
     <link rel="icon" href="/icon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
@@ -80,7 +80,7 @@ const STATS = [
       <p class="kicker">your code editor is mostly decoration.</p>
       <h1>zero is what’s left.</h1>
       <p class="sub">
-        A 14MB macOS code editor built around running coding agents: a terminal that takes the whole
+        A 19MB macOS code editor built around running coding agents: a terminal that takes the whole
         width, projects as tabs, git worktrees down the side, a record button that turns four minutes
         of rambling into a prompt you can hand any AI, and an editor for when you actually need to
         read one of your files. That’s it — on purpose. It opens in 0.38s and has never once asked
@@ -249,8 +249,9 @@ const STATS = [
         <div>
           <p class="head">it’s barely even there.</p>
           <p class="plain">
-            14MB on disk. A window in 0.38s. A quarter of a gigabyte with four projects open. Your RAM
-            goes to the work, not to the app it runs in.
+            19MB on disk. A window in 0.38s. 594MB with four projects open, and a third less CPU
+            than Cursor to draw the same four agents talking. Your RAM goes to the work, not to the
+            app it runs in.
           </p>
           <p class="tech">
             Numbers below, method in BENCHMARKS.md, scripts in bench/ to run on your own machine.
@@ -263,7 +264,8 @@ const STATS = [
       <h2>benchmarks</h2>
       <p class="method">
         Same machine, same project, both editors, three launches each, median reported.
-        M3&nbsp;Max · 36GB · macOS&nbsp;26.5.1 · Cursor&nbsp;3.15.6.
+        M3&nbsp;Max · 36GB · macOS&nbsp;26.5.1 · zero&nbsp;0.25.0 · Cursor&nbsp;3.17.19
+        (cold launch: the original 0.1.0-vs-3.15.6 run — it needs a fresh boot).
         In every graph: <b class="zl">zero is the bright mark</b>; the long grey one is Cursor.
       </p>
 
@@ -271,26 +273,26 @@ const STATS = [
         <div class="bcard">
           <div class="bhead">
             <h4>on disk</h4>
-            <span class="badge">61×</span>
+            <span class="badge">44×</span>
           </div>
           <div class="duo">
-            <div class="drow"><span class="track"><i class="fill z" style="width:1.63%"></i></span><span class="val z">14MB</span></div>
-            <div class="drow"><span class="track"><i class="fill c" style="width:100%"></i></span><span class="val c">860MB</span></div>
+            <div class="drow"><span class="track"><i class="fill z" style="width:2.25%"></i></span><span class="val z">19MB</span></div>
+            <div class="drow"><span class="track"><i class="fill c" style="width:100%"></i></span><span class="val c">845MB</span></div>
           </div>
-          <p class="micro">And 5 files in the bundle, against 17,035 — 3,407× fewer.</p>
+          <p class="micro">And 7 files in the bundle, against 17,021 — 2,432× fewer.</p>
         </div>
 
         <div class="bcard">
           <div class="bhead">
             <h4>shipped JavaScript</h4>
-            <span class="badge">183×</span>
+            <span class="badge">180×</span>
           </div>
           <div class="sqwrap">
             <i class="sq c"></i>
             <i class="sq z"></i>
             <div class="sqlab">
-              <div class="val z">1.4MB</div>
-              <div class="val c">256MB, in 12,021 files</div>
+              <div class="val z">1.5MB</div>
+              <div class="val c">265MB, in 11,995 files</div>
             </div>
           </div>
           <p class="micro">Drawn to scale, by area. The bright square is the entire frontend.</p>
@@ -305,50 +307,50 @@ const STATS = [
             <div class="tlrow">
               <span class="tlab">first window, cold start</span>
               <span class="ttrack">
-                <i class="stem c" style="width:90.7%"></i><i class="pin c" style="left:90.7%"></i>
-                <i class="stem z" style="width:4.2%"></i><i class="pin z" style="left:4.2%"></i>
-                <span class="tval z" style="left:5.5%">0.38s</span>
-                <span class="tval c" style="left:92%">8.16s</span>
+                <i class="stem c" style="width:68%"></i><i class="pin c" style="left:68%"></i>
+                <i class="stem z" style="width:3.2%"></i><i class="pin z" style="left:3.2%"></i>
+                <span class="tval z" style="left:4.5%">0.38s</span>
+                <span class="tval c" style="left:69.3%">8.16s</span>
               </span>
             </div>
             <div class="tlrow">
               <span class="tlab">ready to work, warm start</span>
               <span class="ttrack">
-                <i class="stem c" style="width:73.2%"></i><i class="pin c" style="left:73.2%"></i>
-                <i class="stem z" style="width:26.6%"></i><i class="pin z" style="left:26.6%"></i>
-                <span class="tval z" style="left:28%">2.39s</span>
-                <span class="tval c" style="left:74.5%">6.59s</span>
+                <i class="stem c" style="width:79.3%"></i><i class="pin c" style="left:79.3%"></i>
+                <i class="stem z" style="width:18.6%"></i><i class="pin z" style="left:18.6%"></i>
+                <span class="tval z" style="left:19.9%">2.23s</span>
+                <span class="tval c" style="left:80.6%">9.52s</span>
               </span>
             </div>
-            <div class="taxis"><span>0s</span><span>3s</span><span>6s</span><span>9s</span></div>
+            <div class="taxis"><span>0s</span><span>4s</span><span>8s</span><span>12s</span></div>
           </div>
           <p class="micro">
             Two different finish lines: a window on screen first, ready-to-work second. A cold zero
-            puts its window up before a warm Cursor does — 0.38s against 1.14s.
+            puts its window up before a warm Cursor does — 0.38s against 1.08s.
           </p>
         </div>
 
         <div class="bcard">
           <div class="bhead">
             <h4>memory, as projects open</h4>
-            <span class="badge">up to 7.4×</span>
+            <span class="badge">up to 2.9×</span>
           </div>
-          <svg class="memchart" viewBox="0 0 344 166" role="img" aria-label="memory in MB from one to four projects open, measured, then the linear trend extended to six: Cursor climbs from 807MB to 1,803MB and projects to about 2.5GB; zero stays in the noise around 250MB">
+          <svg class="memchart" viewBox="0 0 344 166" role="img" aria-label="memory in MB from one to four projects open, measured, then the linear trend extended to six: Cursor climbs from 866MB to 1,851MB and projects to about 2.5GB; zero climbs gently from 410MB to 594MB, about 60MB per project">
             <line x1="24" y1="150" x2="340" y2="150" stroke="var(--border)" />
             <line x1="24" y1="98.1" x2="340" y2="98.1" stroke="var(--border)" stroke-dasharray="2 4" />
             <line x1="24" y1="46.2" x2="340" y2="46.2" stroke="var(--border)" stroke-dasharray="2 4" />
             <text x="20" y="153" text-anchor="end">0</text>
             <text x="20" y="101" text-anchor="end">1GB</text>
             <text x="20" y="49" text-anchor="end">2GB</text>
-            <polyline points="28,108.1 83,95.5 138,74.6 193,56.4" fill="none" stroke="var(--bar-c)" stroke-width="2" />
-            <polyline points="193,56.4 248,37.7 303,19" fill="none" stroke="var(--bar-c)" stroke-width="2" stroke-dasharray="3 5" />
-            <polyline points="28,142.6 83,140.9 138,128.2 193,137.4" fill="none" stroke="var(--accent)" stroke-width="2" />
-            <polyline points="193,137.4 303,137.4" fill="none" stroke="var(--accent)" stroke-width="2" stroke-dasharray="3 5" />
-            <circle cx="28" cy="108.1" r="2.5" fill="var(--bar-c)" /><circle cx="83" cy="95.5" r="2.5" fill="var(--bar-c)" /><circle cx="138" cy="74.6" r="2.5" fill="var(--bar-c)" /><circle cx="193" cy="56.4" r="2.5" fill="var(--bar-c)" />
-            <circle cx="28" cy="142.6" r="2.5" fill="var(--accent)" /><circle cx="83" cy="140.9" r="2.5" fill="var(--accent)" /><circle cx="138" cy="128.2" r="2.5" fill="var(--accent)" /><circle cx="193" cy="137.4" r="2.5" fill="var(--accent)" />
-            <text x="186" y="52" text-anchor="end">1,803</text>
+            <polyline points="28,105.0 83,71.1 138,77.7 193,53.9" fill="none" stroke="var(--bar-c)" stroke-width="2" />
+            <polyline points="193,53.9 248,36.8 303,19.7" fill="none" stroke="var(--bar-c)" stroke-width="2" stroke-dasharray="3 5" />
+            <polyline points="28,128.7 83,125.6 138,122.1 193,119.2" fill="none" stroke="var(--accent)" stroke-width="2" />
+            <polyline points="193,119.2 303,112.9" fill="none" stroke="var(--accent)" stroke-width="2" stroke-dasharray="3 5" />
+            <circle cx="28" cy="105.0" r="2.5" fill="var(--bar-c)" /><circle cx="83" cy="71.1" r="2.5" fill="var(--bar-c)" /><circle cx="138" cy="77.7" r="2.5" fill="var(--bar-c)" /><circle cx="193" cy="53.9" r="2.5" fill="var(--bar-c)" />
+            <circle cx="28" cy="128.7" r="2.5" fill="var(--accent)" /><circle cx="83" cy="125.6" r="2.5" fill="var(--accent)" /><circle cx="138" cy="122.1" r="2.5" fill="var(--accent)" /><circle cx="193" cy="119.2" r="2.5" fill="var(--accent)" />
+            <text x="186" y="50" text-anchor="end">1,851</text>
             <text x="252" y="12">≈2.5GB at six</text>
-            <text class="z" x="144" y="118">zero: 143–420, noise</text>
+            <text class="z" x="100" y="112">zero: +60MB per project</text>
             <text x="28" y="163">1</text>
             <text x="83" y="163">2</text>
             <text x="138" y="163">3</text>
@@ -357,10 +359,10 @@ const STATS = [
             <text x="303" y="163">6</text>
           </svg>
           <p class="micro">
-            MB of phys_footprint, one through four projects measured, the dashed part extended on
-            Cursor’s own slope — a window per project, ~360MB and three processes each. zero opens a
-            tab instead; its per-project cost is below its own noise floor, which is why its line
-            won’t sit still.
+            MB of phys_footprint, one through four projects measured, the dashed parts extended on
+            each editor’s own slope — Cursor opens a window per project, ~330MB and three processes
+            each. zero opens a tab: ~60MB, no new processes, and five steady-state samples within
+            17MB of each other.
           </p>
         </div>
 
@@ -382,27 +384,31 @@ const STATS = [
               <span class="zbig">0</span>
               <div class="zwhat">
                 <span class="val z">bundled runtime — system WebKit</span>
-                <span class="val c">Cursor: 259MB of Electron</span>
+                <span class="val c">Cursor: 257MB of Electron</span>
               </div>
               <span class="badge">∞ less</span>
             </div>
           </div>
           <p class="micro">
-            The whole bundle is five files. There is nothing to update, nothing to sync, and nothing
+            The whole bundle is seven files. There is nothing to update, nothing to sync, and nothing
             to disable.
           </p>
         </div>
 
         <div class="bcard">
           <div class="bhead">
-            <h4>idle CPU</h4>
-            <span class="badge">2.4×</span>
+            <h4>rendering agents’ output</h4>
+            <span class="badge">1.5×</span>
           </div>
           <div class="duo">
-            <div class="drow"><span class="track"><i class="fill z" style="width:41.4%"></i></span><span class="val z">1.10%</span></div>
-            <div class="drow"><span class="track"><i class="fill c" style="width:100%"></i></span><span class="val c">2.66%</span></div>
+            <div class="drow"><span class="track"><i class="fill z" style="width:65.2%"></i></span><span class="val z">+35.8%</span></div>
+            <div class="drow"><span class="track"><i class="fill c" style="width:100%"></i></span><span class="val c">+54.9%</span></div>
           </div>
-          <p class="micro">Of one core, while doing nothing.</p>
+          <p class="micro">
+            Of one core: the editor’s own cost of drawing four terminals streaming 25 lines/s each.
+            And zero starts from an idle floor a third of Cursor’s — 3.42% against 11.35% with four
+            projects open.
+          </p>
         </div>
 
         <div class="bcard">
@@ -489,7 +495,7 @@ const STATS = [
         zero is purpose-built for exactly one platform. No Intel branch, no Electron, no compatibility
         ballast for a MacBook from 2017 — and it leans on macOS for everything macOS is already good
         at: the WebView, the transcriber, the fonts. Building for one machine instead of every machine
-        is why the whole app is 14MB and why it opens in 0.38s.
+        is why the whole app is 19MB and why it opens in 0.38s.
       </p>
     </section>
 
