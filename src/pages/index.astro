@@ -556,7 +556,7 @@ const STATS = [
           // Lifetime dmg downloads across every release. Shown only once the
           // number is doing the page a favour.
           const total = rels.reduce((n, rr) => n + (findDmg(rr)?.download_count || 0), 0);
-          const downloads = total >= 100 ? `${total.toLocaleString('en-GB')} downloads` : '';
+          const downloads = total >= 50 ? `${total.toLocaleString('en-GB')} downloads` : '';
           const bits = [v && `v${v}`, date, size, downloads].filter(Boolean).join(' · ');
           if (!bits) return;
           for (const el of document.querySelectorAll('.release-extra')) {
