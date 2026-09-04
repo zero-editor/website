@@ -22,6 +22,9 @@ const IC: Record<string, string> = {
   restore: '<path d="M4 5v6h6"/><path d="M4.5 11a8 8 0 1 0 2.5-6"/>',
   slash: '<circle cx="12" cy="12" r="9"/><path d="m6 6 12 12"/>',
   ring: '<circle cx="12" cy="12" r="8" opacity="0.18"/><path d="M12 4a8 8 0 1 1-7.39 4.94"/>',
+  mic: '<rect x="9" y="3" width="6" height="10" rx="3"/><path d="M6 11v1a6 6 0 0 0 12 0v-1"/><path d="M12 18v3"/>',
+  note: '<path d="M9 4H7a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2"/><rect x="9" y="2.5" width="6" height="3.5" rx="1"/><path d="M8.5 11h7M8.5 15h4.5"/>',
+  list: '<path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1.1"/><circle cx="4.5" cy="12" r="1.1"/><circle cx="4.5" cy="18" r="1.1"/>',
   feather: '<path d="M19.5 4.5c-5.5 0-11 3.5-13 9-1 2.7-1.2 5.3-1.2 7 2 0 4.6-.2 7.2-1.2 5.5-2 9-7.5 8.5-14.8Z"/><path d="m4 20 9.5-9.5"/>',
 };
 
@@ -30,7 +33,7 @@ const OCTO =
   '<path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>';
 
 const STATS = [
-  { icon: 'box',  x: '44×',  l: 'smaller on disk',                 zv: '19MB',  cv: '845MB',   r: 19 / 845 },
+  { icon: 'box',  x: '42×',  l: 'smaller on disk',                 zv: '20MB',  cv: '845MB',   r: 20 / 845 },
   { icon: 'bolt', x: '21×',  l: 'sooner to a window',              zv: '0.38s', cv: '8.16s',   r: 0.38 / 8.16 },
   { icon: 'chip', x: '2.9×', l: 'lighter with four projects open', zv: '594MB', cv: '1,709MB', r: 594 / 1709 },
 ];
@@ -43,7 +46,7 @@ const STATS = [
     <title>zero — a code editor for coding agents</title>
     <meta
       name="description"
-      content="A minimal macOS code editor built around running coding agents. 19MB, opens in 0.38s, 594MB with four projects open. press record, ramble, press stop."
+      content="A minimal macOS code editor built around running coding agents. 20MB, opens in 0.38s, 594MB with four projects open. press record, ramble, press stop."
     />
     <link rel="icon" href="/icon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
@@ -80,7 +83,7 @@ const STATS = [
       <p class="kicker">your code editor is mostly decoration.</p>
       <h1>zero is what’s left.</h1>
       <p class="sub">
-        A 19MB macOS code editor built around running coding agents: a terminal that takes the whole
+        A 20MB macOS code editor built around running coding agents: a terminal that takes the whole
         width, projects as tabs, git worktrees down the side, a record button that turns four minutes
         of rambling into a prompt you can hand any AI, and an editor for when you actually need to
         read one of your files. That’s it — on purpose. It opens in 0.38s and has never once asked
@@ -96,7 +99,7 @@ const STATS = [
           <span class="release-extra"></span>
         </p>
         <p class="cta-alt oss">
-          Open source, MIT — <a href={GITHUB}>all 21,596 lines of it on GitHub</a>.
+          Open source, MIT — <a href={GITHUB}>all 37,121 lines of it on GitHub</a>.
         </p>
       </div>
       <p class="fine">Apple Silicon · macOS 26 · no network code in the app</p>
@@ -249,7 +252,7 @@ const STATS = [
         <div>
           <p class="head">it’s barely even there.</p>
           <p class="plain">
-            19MB on disk. A window in 0.38s. 594MB with four projects open, and a third less CPU
+            20MB on disk. A window in 0.38s. 594MB with four projects open, and a third less CPU
             than Cursor to draw the same four agents talking. Your RAM goes to the work, not to the
             app it runs in.
           </p>
@@ -276,7 +279,7 @@ const STATS = [
             <span class="badge">44×</span>
           </div>
           <div class="duo">
-            <div class="drow"><span class="track"><i class="fill z" style="width:2.25%"></i></span><span class="val z">19MB</span></div>
+            <div class="drow"><span class="track"><i class="fill z" style="width:2.37%"></i></span><span class="val z">20MB</span></div>
             <div class="drow"><span class="track"><i class="fill c" style="width:100%"></i></span><span class="val c">845MB</span></div>
           </div>
           <p class="micro">And 7 files in the bundle, against 17,021 — 2,432× fewer.</p>
@@ -480,12 +483,37 @@ const STATS = [
             Projects, splits, tabs — restored. <code>claude --continue</code> does the rest.
           </p>
         </div>
+        <div class="card">
+          <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.list} /> issues beside the code</h3>
+          <p>
+            Your Linear issues down the rail, sorted by urgency — each row also saying what the
+            checkout knows: whether the branch exists, whether it is in a worktree, whether the pull
+            request is open or merged. Open one as a tab, or hand it to the agent as a prompt.
+          </p>
+        </div>
+        <div class="card">
+          <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.mic} /> press record, ramble, press stop</h3>
+          <p>
+            Talk at it and a written-up document comes back. Transcribed on the machine, tidied by
+            the agent you already pay for. Say more onto a memo later and it merges in.
+          </p>
+        </div>
+        <div class="card">
+          <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.note} /> paste, and it arrives in shape</h3>
+          <p>
+            <code>⌘⌥N</code> opens a scratch note that takes the terminal out of whatever you put
+            in it — tables rebuilt, wrapped commands rejoined so they run again, every word left
+            exactly as it was.
+          </p>
+        </div>
       </div>
       <div class="card wide">
         <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.slash} />what’s not in it</h3>
         <p>
-          An extension marketplace. A sign-in. A welcome tour. A chat panel you can’t close. Network
-          code of any kind.
+          An extension marketplace. A sign-in. A welcome tour. A chat panel you can’t close.
+          Telemetry, analytics, or an account of any kind. zero talks to exactly two things, and
+          only one by default: GitHub, to ask whether there is an update, and Linear, if you
+          connect it.
         </p>
       </div>
     </section>
@@ -496,7 +524,7 @@ const STATS = [
         zero is purpose-built for exactly one platform. No Intel branch, no Electron, no compatibility
         ballast for a MacBook from 2017 — and it leans on macOS for everything macOS is already good
         at: the WebView, the transcriber, the fonts. Building for one machine instead of every machine
-        is why the whole app is 19MB and why it opens in 0.38s.
+        is why the whole app is 20MB and why it opens in 0.38s.
       </p>
     </section>
 
@@ -511,7 +539,7 @@ const STATS = [
         and drag zero to Applications. Apple Silicon, macOS 26, <code>git</code> — nothing else.
       </p>
       <p class="alt">
-        The whole thing is <a href={GITHUB}>open source on GitHub</a> — 21,596 lines of MIT. Read it
+        The whole thing is <a href={GITHUB}>open source on GitHub</a> — 37,121 lines of MIT. Read it
         in an afternoon, or <a href={`${GITHUB}#or-build-it`}>build it yourself</a> in about a minute.
       </p>
     </section>
