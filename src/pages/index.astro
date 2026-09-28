@@ -25,6 +25,9 @@ const IC: Record<string, string> = {
   mic: '<rect x="9" y="3" width="6" height="10" rx="3"/><path d="M6 11v1a6 6 0 0 0 12 0v-1"/><path d="M12 18v3"/>',
   note: '<path d="M9 4H7a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2"/><rect x="9" y="2.5" width="6" height="3.5" rx="1"/><path d="M8.5 11h7M8.5 15h4.5"/>',
   list: '<path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1.1"/><circle cx="4.5" cy="12" r="1.1"/><circle cx="4.5" cy="18" r="1.1"/>',
+  link: '<path d="M10 14a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1 1"/><path d="M14 10a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1-1"/>',
+  toggle: '<rect x="2.5" y="7" width="19" height="10" rx="5"/><circle cx="16.5" cy="12" r="2.5"/>',
+  update: '<path d="M12 4v11"/><path d="m7.5 10.5 4.5 4.5 4.5-4.5"/><path d="M5 19h14"/>',
   feather: '<path d="M19.5 4.5c-5.5 0-11 3.5-13 9-1 2.7-1.2 5.3-1.2 7 2 0 4.6-.2 7.2-1.2 5.5-2 9-7.5 8.5-14.8Z"/><path d="m4 20 9.5-9.5"/>',
 };
 
@@ -48,7 +51,6 @@ const STATS = [
       name="description"
       content="A minimal macOS code editor built around running coding agents. 20MB, opens in 0.38s, 594MB with four projects open. press record, ramble, press stop."
     />
-    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
     <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
     <link rel="apple-touch-icon" href="/icon.png" />
     <meta name="theme-color" content="#1f1f1f" />
@@ -58,8 +60,7 @@ const STATS = [
       content="A minimal macOS code editor built around running coding agents. press record, ramble, press stop."
     />
     <meta property="og:type" content="website" />
-    <!-- Swap for the real domain's /icon.png once there is one; og wants absolute URLs. -->
-    <meta property="og:image" content={`https://raw.githubusercontent.com/${REPO}/main/src-tauri/icons/128x128%402x.png`} />
+    <meta property="og:image" content="https://www.zeroeditor.sh/icon.png" />
     <meta name="twitter:card" content="summary" />
   </head>
 
@@ -99,10 +100,10 @@ const STATS = [
           <span class="release-extra"></span>
         </p>
         <p class="cta-alt oss">
-          Open source, MIT — <a href={GITHUB}>all 37,121 lines of it on GitHub</a>.
+          Open source, MIT — <a href={GITHUB}>all 42,956 lines of it on GitHub</a>.
         </p>
       </div>
-      <p class="fine">Apple Silicon · macOS 26 · no network code in the app</p>
+      <p class="fine">Apple Silicon only · macOS 26 only · no telemetry, no account</p>
     </header>
 
     <section class="stats" aria-label="the numbers">
@@ -268,7 +269,8 @@ const STATS = [
       <p class="method">
         Same machine, same project, both editors, three launches each, median reported.
         M3&nbsp;Max · 36GB · macOS&nbsp;26.5.1 · zero&nbsp;0.25.0 · Cursor&nbsp;3.17.19
-        (cold launch: the original 0.1.0-vs-3.15.6 run — it needs a fresh boot).
+        (cold launch: the original 0.1.0-vs-3.15.6 run — it needs a fresh boot). Disk and
+        JavaScript re-measured on zero&nbsp;0.58.4.
         In every graph: <b class="zl">zero is the bright mark</b>; the long grey one is Cursor.
       </p>
 
@@ -276,7 +278,7 @@ const STATS = [
         <div class="bcard">
           <div class="bhead">
             <h4>on disk</h4>
-            <span class="badge">44×</span>
+            <span class="badge">42×</span>
           </div>
           <div class="duo">
             <div class="drow"><span class="track"><i class="fill z" style="width:2.37%"></i></span><span class="val z">20MB</span></div>
@@ -288,13 +290,13 @@ const STATS = [
         <div class="bcard">
           <div class="bhead">
             <h4>shipped JavaScript</h4>
-            <span class="badge">180×</span>
+            <span class="badge">170×</span>
           </div>
           <div class="sqwrap">
             <i class="sq c"></i>
             <i class="sq z"></i>
             <div class="sqlab">
-              <div class="val z">1.5MB</div>
+              <div class="val z">1.6MB</div>
               <div class="val c">265MB, in 11,995 files</div>
             </div>
           </div>
@@ -446,7 +448,7 @@ const STATS = [
           <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.tabs} />projects are tabs</h3>
           <p>
             Each keeps its own terminals, sidebar and files. Switching is instant, because nothing
-            re-renders.
+            re-renders. A project can be several folders, for code split across repositories.
           </p>
         </div>
         <div class="card">
@@ -473,14 +475,23 @@ const STATS = [
           <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.search} />getting around</h3>
           <p>
             <code>⌘P</code> fuzzy-opens anything git admits to. <code>⌘⇧F</code> searches in Rust,
-            quicker than ripgrep. ⌘-click jumps to a definition, and <code>file.ts:42</code> in the
-            terminal opens on the line.
+            quicker than ripgrep. ⌘-click jumps to a definition.
+          </p>
+        </div>
+        <div class="card">
+          <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.link} />the terminal is all links</h3>
+          <p>
+            ⌘-click <code>file.ts:42</code> and it opens on the line, even when the agent named it
+            from three folders down. A folder opens in Finder, <code>PR #732</code> on GitHub,
+            <code>ECL-260</code> in Linear. Hover says where first.
           </p>
         </div>
         <div class="card">
           <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.restore} />it opens how you left it</h3>
           <p>
-            Projects, splits, tabs — restored. <code>claude --continue</code> does the rest.
+            Projects, splits, tabs — and the shells in them. Restart or update zero and every
+            terminal comes back mid-sentence, Claude sessions included. Quitting still takes them
+            with it.
           </p>
         </div>
         <div class="card">
@@ -488,22 +499,37 @@ const STATS = [
           <p>
             Your Linear issues down the rail, sorted by urgency — each row also saying what the
             checkout knows: whether the branch exists, whether it is in a worktree, whether the pull
-            request is open or merged. Open one as a tab, or hand it to the agent as a prompt.
+            request is open or merged. Press play on a group or a row and a terminal opens with
+            claude on a prompt about exactly those.
           </p>
         </div>
         <div class="card">
           <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.mic} /> press record, ramble, press stop</h3>
           <p>
             Talk at it and a written-up document comes back. Transcribed on the machine, tidied by
-            the agent you already pay for. Say more onto a memo later and it merges in.
+            the agent you already pay for. Say more later, or type a follow-up, and it merges in.
           </p>
         </div>
         <div class="card">
-          <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.note} /> paste, and it arrives in shape</h3>
+          <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.note} /> notes, drawn as you type</h3>
           <p>
-            <code>⌘⌥N</code> opens a scratch note that takes the terminal out of whatever you put
-            in it — tables rebuilt, wrapped commands rejoined so they run again, every word left
-            exactly as it was.
+            <code>⌘⌥N</code> opens a note that renders its markdown as you write — headings,
+            checkboxes that tick, tables as tables — and takes the terminal out of anything pasted
+            in. Its Run button hands the whole note to claude.
+          </p>
+        </div>
+        <div class="card">
+          <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.update} />updates itself, never restarts itself</h3>
+          <p>
+            A new version downloads in the background. The restart waits for your click, and your
+            terminals are still there after it.
+          </p>
+        </div>
+        <div class="card">
+          <h3><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" set:html={IC.toggle} />switch off what you don’t use</h3>
+          <p>
+            Memos, notes, Linear and search are switches in settings. Off means off — the icon
+            goes, and so does anything that was listening.
           </p>
         </div>
       </div>
@@ -539,7 +565,7 @@ const STATS = [
         and drag zero to Applications. Apple Silicon, macOS 26, <code>git</code> — nothing else.
       </p>
       <p class="alt">
-        The whole thing is <a href={GITHUB}>open source on GitHub</a> — 37,121 lines of MIT. Read it
+        The whole thing is <a href={GITHUB}>open source on GitHub</a> — 42,956 lines of MIT. Read it
         in an afternoon, or <a href={`${GITHUB}#or-build-it`}>build it yourself</a> in about a minute.
       </p>
     </section>
